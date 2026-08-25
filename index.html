@@ -75,6 +75,10 @@
           <i class="fa-solid fa-clock-rotate-left"></i>
           <span data-i18n="history">السجل</span>
         </button>
+        <button class="nav-link" data-tab="developer">
+          <i class="fa-solid fa-code"></i>
+          <span data-i18n="developer">المطور</span>
+        </button>
       </nav>
 
       <!-- Sidebar Footer -->
@@ -85,9 +89,6 @@
           </a>
           <a href="https://t.me/sytus" target="_blank" rel="noopener noreferrer" class="social-icon-btn tg-link" title="Telegram: @sytus">
             <i class="fa-brands fa-telegram"></i>
-          </a>
-          <a href="https://instagram.com/lnetl" target="_blank" rel="noopener noreferrer" class="social-icon-btn insta-link" title="Instagram: @lnetl">
-            <i class="fa-brands fa-instagram"></i>
           </a>
         </div>
 
@@ -141,6 +142,9 @@
           </div>
         </div>
         <div class="top-right">
+          <button class="icon-btn dev-contact-btn" onclick="navigateTo('developer')" title="المطور / Developer">
+            <i class="fa-solid fa-code"></i>
+          </button>
           <button class="lang-pill-btn" id="langToggleBtn" title="تغيير اللغة / Switch Language">
             <svg class="flag-svg" viewBox="0 0 900 600" width="22" height="15" style="border-radius: 3px; overflow: hidden; display: block; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 1px 4px rgba(0,0,0,0.3);">
               <rect width="900" height="200" fill="#ce1126"/>
@@ -324,14 +328,18 @@
           
           <div class="sub-filter-bar">
             <div class="filter-pills-left">
-              <button class="filter-pill active" data-filter="popular">Popular</button>
-              <button class="filter-pill" data-filter="trending">Trending</button>
-              <button class="filter-pill" data-filter="top_rated">Top rated</button>
-              <button class="filter-pill" data-filter="upcoming">Upcoming</button>
-              <button class="filter-pill" data-filter="in_cinemas">In cinemas</button>
+              <!-- Year Filter Dropdown -->
+              <div class="genre-select-wrap year-select-wrap">
+                <span class="genre-tag-label" data-i18n="yearLabel">السنة</span>
+                <select id="movieYearSelect">
+                  <!-- Dynamically populated from currentYear+1 down to 1970 -->
+                </select>
+                <i class="fa-solid fa-xmark genre-clear-btn" id="movieYearClear" title="Clear year"></i>
+              </div>
 
+              <!-- Genre Filter Dropdown -->
               <div class="genre-select-wrap">
-                <span class="genre-tag-label">Genre</span>
+                <span class="genre-tag-label" data-i18n="genreLabel">النوع</span>
                 <select id="movieGenreSelect">
                   <option value="all" selected>All Genres</option>
                   <option value="Action">Action</option>
@@ -369,7 +377,7 @@
           <div class="poster-grid" id="allMoviesGrid">
             <div class="loading-pulse" style="grid-column: 1/-1; padding: 4rem 2rem; text-align: center; color: var(--text-muted);">
               <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 0.75rem; display: block;"></i>
-              <span>Loading 50+ popular movies...</span>
+              <span>Loading movies...</span>
             </div>
           </div>
           <div class="load-more-container" id="loadMoreMoviesWrap" style="display: none;">
@@ -384,20 +392,29 @@
         <div class="tab-view" id="view-tv" style="display: none;">
           <div class="sub-filter-bar">
             <div class="filter-pills-left">
-              <button class="filter-pill active" data-filter="popular">Popular</button>
-              <button class="filter-pill" data-filter="trending">Trending</button>
-              <button class="filter-pill" data-filter="top_rated">Top rated</button>
+              <!-- TV Year Filter Dropdown -->
+              <div class="genre-select-wrap year-select-wrap">
+                <span class="genre-tag-label" data-i18n="yearLabel">السنة</span>
+                <select id="tvYearSelect">
+                  <!-- Dynamically populated from currentYear+1 down to 1970 -->
+                </select>
+                <i class="fa-solid fa-xmark genre-clear-btn" id="tvYearClear" title="Clear year"></i>
+              </div>
 
+              <!-- TV Genre Select Dropdown -->
               <div class="genre-select-wrap">
-                <span class="genre-tag-label">Genre</span>
+                <span class="genre-tag-label" data-i18n="genreLabel">النوع</span>
                 <select id="tvGenreSelect">
-                  <option value="all">All Genres</option>
+                  <option value="all" selected>All Genres</option>
                   <option value="Action">Action</option>
                   <option value="Animation">Animation</option>
                   <option value="Comedy">Comedy</option>
                   <option value="Drama">Drama</option>
                   <option value="Sci-Fi">Sci-Fi</option>
+                  <option value="Crime">Crime</option>
+                  <option value="Mystery">Mystery</option>
                 </select>
+                <i class="fa-solid fa-xmark genre-clear-btn" id="tvGenreClear" title="Clear genre"></i>
               </div>
             </div>
           </div>
@@ -437,6 +454,43 @@
           <div class="empty-state" id="emptyHistory" style="display: none;">
             <i class="fa-solid fa-clock-rotate-left"></i>
             <p>No watch history recorded yet.</p>
+          </div>
+        </div>
+
+        <!-- ==================== 6. DEVELOPER TAB VIEW (FULL SCREEN PAGE) ==================== -->
+        <div class="tab-view" id="view-developer" style="display: none;">
+          <div class="dev-full-page-container">
+            <div class="dev-hero-card">
+              <div class="dev-avatar-glow">
+                <i class="fa-solid fa-code"></i>
+              </div>
+              <h1 class="dev-name-title">أمير علي</h1>
+              <p class="dev-role-subtitle" data-i18n="devBy">تطوير وبرمجة • أمير علي</p>
+              <div class="dev-badge-pills">
+                <span class="dev-tag"><i class="fa-solid fa-film"></i> <span data-i18n="appName">سينما العراق</span></span>
+                <span class="dev-tag"><i class="fa-solid fa-bolt"></i> Fast P2P Streaming</span>
+              </div>
+            </div>
+
+            <div class="dev-links-grid">
+              <a href="https://xstein.site/" target="_blank" rel="noopener noreferrer" class="dev-portal-card site-card">
+                <div class="portal-card-icon"><i class="fa-solid fa-globe"></i></div>
+                <div class="portal-card-info">
+                  <span class="portal-card-label" data-i18n="officialSite">الموقع الرسمي</span>
+                  <span class="portal-card-val">xstein.site</span>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square portal-arrow"></i>
+              </a>
+
+              <a href="https://t.me/sytus" target="_blank" rel="noopener noreferrer" class="dev-portal-card tg-card">
+                <div class="portal-card-icon"><i class="fa-brands fa-telegram"></i></div>
+                <div class="portal-card-info">
+                  <span class="portal-card-label">تيليكرام</span>
+                  <span class="portal-card-val">@sytus</span>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square portal-arrow"></i>
+              </a>
+            </div>
           </div>
         </div>
 
