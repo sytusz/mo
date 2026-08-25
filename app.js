@@ -491,7 +491,7 @@ let isFetchingBatch = false;
 let favourites = JSON.parse(localStorage.getItem('ventic_favourites') || '[]');
 let watchlist = JSON.parse(localStorage.getItem('ventic_watchlist') || '[]');
 let history = JSON.parse(localStorage.getItem('ventic_history') || '[]');
-let savedTheme = localStorage.getItem('ventic_theme') || 'ventic-dark';
+let savedTheme = localStorage.getItem('ventic_theme') || 'crimson';
 
 // Register stored items
 registerItems(favourites);
@@ -650,6 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupLanguageSwitcher();
   setupGlobalEventDelegation();
   setupFilterBarEvents();
+  initCustomPlayer();
   setupSearchEngine();
   updateBadgeCounters();
   restoreLastRoute();
@@ -2180,24 +2181,24 @@ window.open = function(url, target, features) {
 function generateServerUrls(imdbId, isSeries, season = 1, episode = 1) {
   return [
     {
-      name: 'Server 1 · AutoEmbed Ultra 1080p',
-      sub: 'Ultra High Speed · Arabic Subs (Torrentio Node)',
+      name: 'Server 1 · VidLink Ultra (Arabic Auto)',
+      sub: 'Auto Arabic Subtitles · Mobile & iOS High Speed',
+      url: isSeries ? `https://vidlink.pro/tv/${imdbId}/${season}/${episode}?sub_lang=ar&ds_lang=ar` : `https://vidlink.pro/movie/${imdbId}?sub_lang=ar&ds_lang=ar`
+    },
+    {
+      name: 'Server 2 · AutoEmbed PRO 1080p',
+      sub: 'Built-in Arabic Subtitles · Torrentio Node',
       url: isSeries ? `https://autoembed.co/tv/imdb/${imdbId}-${season}-${episode}?sub=ar&sub_lang=ar` : `https://autoembed.co/movie/imdb/${imdbId}?sub=ar&sub_lang=ar`
     },
     {
-      name: 'Server 2 · VidSrc Cloud 1080p',
+      name: 'Server 3 · EmbedSU Multi-Sub 1080p',
+      sub: 'Zero Buffer · Auto Arabic Subtitles (KnightCrawler)',
+      url: isSeries ? `https://embed.su/embed/tv/${imdbId}/${season}/${episode}?sub=ar&default_lang=ar` : `https://embed.su/embed/movie/${imdbId}?sub=ar&default_lang=ar`
+    },
+    {
+      name: 'Server 4 · VidSrc Cloud 1080p',
       sub: 'Zero Buffer · Arabic Subtitles Default',
       url: isSeries ? `https://vidsrc.xyz/embed/tv?imdb=${imdbId}&season=${season}&episode=${episode}&ds_lang=ar` : `https://vidsrc.xyz/embed/movie?imdb=${imdbId}&ds_lang=ar`
-    },
-    {
-      name: 'Server 3 · EmbedSU Multi-Sub 1080p',
-      sub: 'Auto Arabic Subtitles (KnightCrawler)',
-      url: isSeries ? `https://embed.su/embed/tv/${imdbId}/${season}/${episode}?sub=ar` : `https://embed.su/embed/movie/${imdbId}?sub=ar`
-    },
-    {
-      name: 'Server 4 · MultiEmbed Stream PRO',
-      sub: 'Direct Stream Mirror · Arabic Subtitles',
-      url: isSeries ? `https://multiembed.mov/?video_id=${imdbId}&s=${season}&e=${episode}&sub_lang=ar` : `https://multiembed.mov/?video_id=${imdbId}&sub_lang=ar`
     },
     {
       name: 'Server 5 · VidSrc CC High-Bandwidth',
@@ -2205,19 +2206,19 @@ function generateServerUrls(imdbId, isSeries, season = 1, episode = 1) {
       url: isSeries ? `https://vidsrc.cc/v2/embed/tv/${imdbId}/${season}/${episode}?sub=ar` : `https://vidsrc.cc/v2/embed/movie/${imdbId}?sub=ar`
     },
     {
-      name: 'Server 6 · 2Embed Mirror HD',
+      name: 'Server 6 · MultiEmbed Stream PRO',
+      sub: 'Direct Stream Mirror · Arabic Subtitles',
+      url: isSeries ? `https://multiembed.mov/?video_id=${imdbId}&s=${season}&e=${episode}&sub_lang=ar` : `https://multiembed.mov/?video_id=${imdbId}&sub_lang=ar`
+    },
+    {
+      name: 'Server 7 · 2Embed Mirror HD',
       sub: 'High Reliability Backup · Arabic Subs',
       url: isSeries ? `https://www.2embed.cc/embedtv/${imdbId}&s=${season}&e=${episode}&sub=ar` : `https://www.2embed.cc/embed/${imdbId}?sub=ar`
     },
     {
-      name: 'Server 7 · SmashyStream Multi-Server',
+      name: 'Server 8 · SmashyStream Multi-Server',
       sub: 'Fast Multi-Source Backup · Arabic Subs',
       url: isSeries ? `https://player.smashy.stream/tv/${imdbId}?s=${season}&e=${episode}&sub_lang=ar` : `https://player.smashy.stream/movie/${imdbId}?sub_lang=ar`
-    },
-    {
-      name: 'Server 8 · SuperEmbed High-Speed',
-      sub: 'Instant Multi-Language · Arabic Subs',
-      url: isSeries ? `https://multiembed.mov/directstream.php?video_id=${imdbId}&s=${season}&e=${episode}&sub_lang=ar` : `https://multiembed.mov/directstream.php?video_id=${imdbId}&sub_lang=ar`
     }
   ];
 }
@@ -2481,112 +2482,208 @@ function onStreamSelected(idx) {
   }
 }
 
-// 100% AD-FREE REAL BITTORRENT NATIVE PLAYER
+// ==========================================================================
+// CINEMAIQ NATIVE CUSTOM VIDEO PLAYER ENGINE (0% ADS · 100% CONTROL)
+// ==========================================================================
+
+let currentHls = null;
+let isScrubbing = false;
+let isPlayerActive = false;
+let hudHideTimeout = null;
+
+function formatVideoTime(seconds) {
+  if (isNaN(seconds) || seconds < 0) return '00:00';
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  if (h > 0) {
+    return `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+  return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
+function togglePlayerFullscreen() {
+  const screen = document.getElementById('venticPlayerScreen');
+  if (!document.fullscreenElement) {
+    if (screen && screen.requestFullscreen) screen.requestFullscreen().catch(() => {});
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  }
+}
+
+function populateServerDropdown(imdbId, isSeries, season, episode, activeUrl) {
+  const dropdown = document.getElementById('cinemaServerDropdown');
+  const label = document.getElementById('currentServerLabel');
+  if (!dropdown) return;
+
+  const servers = generateServerUrls(imdbId, isSeries, season, episode);
+  dropdown.innerHTML = servers.map((s, i) => `
+    <button class="dropdown-item ${activeUrl === s.url ? 'active' : ''}" data-server-idx="${i}">
+      <div>
+        <div style="font-weight: 700; color: #fff;">${s.name}</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted);">${s.sub}</div>
+      </div>
+      ${activeUrl === s.url ? '<i class="fa-solid fa-check" style="color: var(--accent-primary);"></i>' : ''}
+    </button>
+  `).join('');
+
+  dropdown.querySelectorAll('.dropdown-item').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.serverIdx, 10);
+      const chosen = servers[idx];
+      if (chosen) {
+        if (label) label.textContent = chosen.name.split('·')[0].trim();
+        dropdown.style.display = 'none';
+        launchVenticPlayer(activeMedia ? activeMedia.name : 'CinemaIQ', chosen.url);
+      }
+    });
+  });
+}
+
 function launchTorrentPlayer(title, magnetUri, releaseQuality) {
   const isSeries = activeMedia.type === 'series' || activeMedia.isAnime;
-  elements.hudMediaTitle.textContent = `${title} (${releaseQuality || '1080p'})`;
+  const imdbId = activeMedia?.id || 'tt15239678';
+  const video = document.getElementById('cinemaNativeVideo');
+  const iframeContainer = document.getElementById('fallbackIframeContainer');
 
-  if (isSeries) {
-    elements.hudEpisodeTag.textContent = `S${selectedSeason}:E${selectedEpisode}`;
-    elements.hudEpisodeTag.style.display = 'inline-block';
-  } else {
-    elements.hudEpisodeTag.style.display = 'none';
+  if (elements.hudMediaTitle) elements.hudMediaTitle.textContent = `${title} (${releaseQuality || '1080p'})`;
+  if (elements.hudEpisodeTag) {
+    if (isSeries) {
+      elements.hudEpisodeTag.textContent = `S${selectedSeason}:E${selectedEpisode}`;
+      elements.hudEpisodeTag.style.display = 'inline-block';
+    } else {
+      elements.hudEpisodeTag.style.display = 'none';
+    }
   }
 
-  const fallbackUrl = isSeries 
-    ? `https://autoembed.co/tv/imdb/${activeMedia.id || 'tt15239678'}-${selectedSeason}-${selectedEpisode}`
-    : `https://autoembed.co/movie/imdb/${activeMedia.id || 'tt15239678'}`;
+  populateServerDropdown(imdbId, isSeries, selectedSeason, selectedEpisode, magnetUri);
 
-  elements.videoCanvas.innerHTML = `
-    <div class="torrent-buffering-hud" id="torrentHudStatus" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 2rem;">
-      <div class="torrent-spinner" style="font-size: 2.5rem; color: var(--accent-primary);"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
-      <h3 style="color: #fff; margin-top: 1.2rem; font-size: 1.4rem;">Connecting to BitTorrent Swarm...</h3>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem;" id="torrentStats">Locating live seeders & buffering stream...</p>
-      
-      <div style="display: flex; gap: 1rem; margin-top: 1.8rem; flex-wrap: wrap; justify-content: center;">
-        <button id="directWebPlayBtn" class="btn-primary" style="padding: 0.75rem 1.4rem; font-weight: 700;">
-          <i class="fa-solid fa-play"></i> Play Instant 1080p Stream
-        </button>
-        <a href="${magnetUri}" class="btn-secondary" style="padding: 0.75rem 1.4rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
-          <i class="fa-solid fa-magnet"></i> Open in VLC / Stremio
-        </a>
-      </div>
-    </div>
-  `;
-
-  const webPlayBtn = document.getElementById('directWebPlayBtn');
-  if (webPlayBtn) {
-    webPlayBtn.addEventListener('click', () => {
-      launchVenticPlayer(title, fallbackUrl);
-    });
+  if (video) {
+    video.style.display = 'block';
+    if (iframeContainer) iframeContainer.style.display = 'none';
   }
 
+  isPlayerActive = true;
   elements.playerScreen.style.display = 'block';
   elements.browseShell.style.display = 'none';
   resetHudTimer();
+
+  const spinner = document.getElementById('cinemaCenterSpinner');
+  if (spinner) spinner.style.display = 'block';
 
   try {
     const wt = getWebTorrentClient();
     if (wt) {
       wt.add(magnetUri, torrent => {
         const file = torrent.files.find(f => f.name.endsWith('.mp4') || f.name.endsWith('.mkv') || f.name.endsWith('.webm'));
-        if (file) {
-          elements.videoCanvas.innerHTML = '';
-          const video = document.createElement('video');
-          video.controls = true;
-          video.autoplay = true;
-          video.style.width = '100%';
-          video.style.height = '100%';
-          video.style.objectFit = 'contain';
-          elements.videoCanvas.appendChild(video);
+        if (file && video) {
+          if (spinner) spinner.style.display = 'none';
           file.renderTo(video, { autoplay: true });
         }
       });
     }
   } catch (e) {
-    console.warn('WebTorrent direct peer fallback:', e);
+    console.warn('WebTorrent direct peer streaming:', e);
   }
 }
 
-let hudHideTimeout = null;
-
 function launchVenticPlayer(title, streamUrl) {
   const isSeries = activeMedia.type === 'series' || activeMedia.isAnime;
-  elements.hudMediaTitle.textContent = title;
-
-  if (isSeries) {
-    elements.hudEpisodeTag.textContent = `S${selectedSeason}:E${selectedEpisode}`;
-    elements.hudEpisodeTag.style.display = 'inline-block';
-  } else {
-    elements.hudEpisodeTag.style.display = 'none';
+  const imdbId = activeMedia?.id || 'tt15239678';
+  
+  if (elements.hudMediaTitle) elements.hudMediaTitle.textContent = title;
+  if (elements.hudEpisodeTag) {
+    if (isSeries) {
+      elements.hudEpisodeTag.textContent = `S${selectedSeason}:E${selectedEpisode}`;
+      elements.hudEpisodeTag.style.display = 'inline-block';
+    } else {
+      elements.hudEpisodeTag.style.display = 'none';
+    }
   }
 
-  elements.videoCanvas.innerHTML = '';
-  const iframe = document.createElement('iframe');
-  iframe.src = streamUrl;
-  
-  // Unrestricted playback with all streaming permissions
-  iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
-  iframe.allowFullscreen = true;
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
-  iframe.style.border = 'none';
-  elements.videoCanvas.appendChild(iframe);
+  populateServerDropdown(imdbId, isSeries, selectedSeason, selectedEpisode, streamUrl);
+
+  const video = document.getElementById('cinemaNativeVideo');
+  const iframeContainer = document.getElementById('fallbackIframeContainer');
+  const hudBottom = document.querySelector('.player-hud .hud-bottom');
+  const centerAction = document.getElementById('cinemaCenterAction');
+  const speedBtn = document.getElementById('cinemaSpeedBtn');
+
+  const isDirectHls = streamUrl.includes('.m3u8') || streamUrl.includes('/hls/') || streamUrl.endsWith('.mp4') || streamUrl.endsWith('.mkv');
+
+  if (isDirectHls && video) {
+    video.style.display = 'block';
+    if (iframeContainer) iframeContainer.style.display = 'none';
+    if (hudBottom) hudBottom.style.display = 'flex';
+    if (centerAction) centerAction.style.display = 'block';
+    if (speedBtn) speedBtn.style.display = 'inline-flex';
+
+    if (currentHls) {
+      currentHls.destroy();
+      currentHls = null;
+    }
+
+    if (streamUrl.includes('.m3u8') && typeof Hls !== 'undefined' && Hls.isSupported()) {
+      currentHls = new Hls({ enableWorker: true, lowLatencyMode: true });
+      currentHls.loadSource(streamUrl);
+      currentHls.attachMedia(video);
+      currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+      });
+    } else {
+      video.src = streamUrl;
+      video.play().catch(() => {});
+    }
+  } else {
+    // Embed Server Mode: Clean full-bleed video without duplicate bottom timeline overlay
+    if (video) {
+      video.pause();
+      video.style.display = 'none';
+    }
+    if (hudBottom) hudBottom.style.display = 'none';
+    if (centerAction) centerAction.style.display = 'none';
+    if (speedBtn) speedBtn.style.display = 'none';
+
+    if (iframeContainer) {
+      iframeContainer.style.display = 'block';
+      iframeContainer.innerHTML = '';
+      const iframe = document.createElement('iframe');
+      iframe.src = streamUrl;
+      iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = 'none';
+      iframeContainer.appendChild(iframe);
+    }
+  }
 
   isPlayerActive = true;
   elements.playerScreen.style.display = 'block';
   elements.browseShell.style.display = 'none';
-
   resetHudTimer();
 }
 
 function exitVenticPlayer() {
   isPlayerActive = false;
   clearTimeout(hudHideTimeout);
+  if (currentHls) {
+    currentHls.destroy();
+    currentHls = null;
+  }
   if (client) {
     try { client.torrents.forEach(t => t.destroy()); } catch (e) {}
   }
-  elements.videoCanvas.innerHTML = '';
+  const video = document.getElementById('cinemaNativeVideo');
+  if (video) {
+    video.pause();
+    video.src = '';
+    video.innerHTML = '';
+  }
+  const iframeContainer = document.getElementById('fallbackIframeContainer');
+  if (iframeContainer) iframeContainer.innerHTML = '';
+
   if (elements.playerHud) elements.playerHud.classList.remove('hidden');
   elements.playerScreen.style.display = 'none';
   elements.browseShell.style.display = 'flex';
@@ -2596,7 +2693,15 @@ function exitVenticPlayer() {
   }
 }
 
-let isPlayerActive = false;
+// Global Popup Blocker during playback for Chrome, Safari & Mobile
+const _nativeWindowOpen = window.open;
+window.open = function(...args) {
+  if (isPlayerActive) {
+    console.warn('[AdBlocker] Blocked background popup ad attempt.');
+    return null;
+  }
+  return _nativeWindowOpen.apply(this, args);
+};
 
 function resetHudTimer() {
   if (elements.playerHud) {
@@ -2608,8 +2713,308 @@ function resetHudTimer() {
       if (isPlayerActive && elements.playerHud) {
         elements.playerHud.classList.add('hidden');
       }
-    }, 2200);
+    }, 3000);
   }
+}
+
+function initCustomPlayer() {
+  const video = document.getElementById('cinemaNativeVideo');
+  const playPauseBtn = document.getElementById('cinemaPlayPauseBtn');
+  const rewindBtn = document.getElementById('cinemaRewindBtn');
+  const forwardBtn = document.getElementById('cinemaForwardBtn');
+  const volumeBtn = document.getElementById('cinemaVolumeBtn');
+  const volumeSlider = document.getElementById('cinemaVolumeSlider');
+  const timelineContainer = document.getElementById('timelineContainer');
+  const timelineProgress = document.getElementById('timelineProgress');
+  const timelineBuffer = document.getElementById('timelineBuffer');
+  const timelineScrubber = document.getElementById('timelineScrubber');
+  const timelineHoverTime = document.getElementById('timelineHoverTime');
+  const currentTimeEl = document.getElementById('cinemaCurrentTime');
+  const durationEl = document.getElementById('cinemaDuration');
+  const speedBtn = document.getElementById('cinemaSpeedBtn');
+  const speedDropdown = document.getElementById('cinemaSpeedDropdown');
+  const serverBtn = document.getElementById('cinemaServerBtn');
+  const serverDropdown = document.getElementById('cinemaServerDropdown');
+  const subtitleBtn = document.getElementById('cinemaSubtitleToggleBtn');
+  const pipBtn = document.getElementById('cinemaPipBtn');
+  const fullscreenBtn = document.getElementById('cinemaFullscreenBtn');
+  const centerIcon = document.getElementById('cinemaCenterIcon');
+  const centerSpinner = document.getElementById('cinemaCenterSpinner');
+  const exitBtn = document.getElementById('exitPlayerBtn');
+
+  if (!video) return;
+
+  function togglePlayPause() {
+    if (video.paused || video.ended) {
+      video.play().catch(() => {});
+      showCenterIcon('<i class="fa-solid fa-play"></i>');
+    } else {
+      video.pause();
+      showCenterIcon('<i class="fa-solid fa-pause"></i>');
+    }
+  }
+
+  function showCenterIcon(html) {
+    if (!centerIcon) return;
+    centerIcon.innerHTML = html;
+    centerIcon.classList.add('show');
+    setTimeout(() => centerIcon.classList.remove('show'), 500);
+  }
+
+  if (playPauseBtn) playPauseBtn.addEventListener('click', (e) => { e.stopPropagation(); togglePlayPause(); });
+  video.addEventListener('click', (e) => { e.stopPropagation(); togglePlayPause(); });
+
+  if (rewindBtn) rewindBtn.addEventListener('click', (e) => { e.stopPropagation(); seekDelta(-10); });
+  if (forwardBtn) forwardBtn.addEventListener('click', (e) => { e.stopPropagation(); seekDelta(10); });
+
+  function seekDelta(seconds) {
+    if (!video.duration) return;
+    video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+    if (seconds < 0) triggerSeekRipple('left');
+    else triggerSeekRipple('right');
+  }
+
+  function triggerSeekRipple(side) {
+    const el = document.getElementById(side === 'left' ? 'seekRippleLeft' : 'seekRippleRight');
+    if (el) {
+      el.classList.add('active');
+      setTimeout(() => el.classList.remove('active'), 500);
+    }
+  }
+
+  // Double-tap seeking for mobile
+  let lastTapTime = 0;
+  video.parentElement.addEventListener('touchend', (e) => {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTapTime;
+    if (tapLength < 300 && tapLength > 0) {
+      const touchX = e.changedTouches[0].clientX;
+      const width = window.innerWidth;
+      if (touchX < width * 0.4) {
+        seekDelta(-10);
+      } else if (touchX > width * 0.6) {
+        seekDelta(10);
+      }
+      e.preventDefault();
+    }
+    lastTapTime = currentTime;
+  });
+
+  video.addEventListener('play', () => {
+    if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+    if (centerSpinner) centerSpinner.style.display = 'none';
+  });
+
+  video.addEventListener('pause', () => {
+    if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+  });
+
+  video.addEventListener('waiting', () => {
+    if (centerSpinner) centerSpinner.style.display = 'block';
+  });
+
+  video.addEventListener('playing', () => {
+    if (centerSpinner) centerSpinner.style.display = 'none';
+  });
+
+  video.addEventListener('timeupdate', () => {
+    if (!isScrubbing && video.duration) {
+      const pct = (video.currentTime / video.duration) * 100;
+      if (timelineProgress) timelineProgress.style.width = `${pct}%`;
+      if (timelineScrubber) timelineScrubber.style.left = `${pct}%`;
+      if (currentTimeEl) currentTimeEl.textContent = formatVideoTime(video.currentTime);
+    }
+  });
+
+  video.addEventListener('durationchange', () => {
+    if (durationEl && video.duration) {
+      durationEl.textContent = formatVideoTime(video.duration);
+    }
+  });
+
+  video.addEventListener('progress', () => {
+    if (video.buffered.length > 0 && video.duration && timelineBuffer) {
+      const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+      const pct = (bufferedEnd / video.duration) * 100;
+      timelineBuffer.style.width = `${pct}%`;
+    }
+  });
+
+  function handleTimelineScrub(e) {
+    if (!video.duration || !timelineContainer) return;
+    const rect = timelineContainer.getBoundingClientRect();
+    const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const targetTime = pos * video.duration;
+    video.currentTime = targetTime;
+    if (timelineProgress) timelineProgress.style.width = `${pos * 100}%`;
+    if (timelineScrubber) timelineScrubber.style.left = `${pos * 100}%`;
+    if (currentTimeEl) currentTimeEl.textContent = formatVideoTime(targetTime);
+  }
+
+  if (timelineContainer) {
+    timelineContainer.addEventListener('mousedown', (e) => {
+      isScrubbing = true;
+      handleTimelineScrub(e);
+    });
+
+    timelineContainer.addEventListener('mousemove', (e) => {
+      if (!video.duration) return;
+      const rect = timelineContainer.getBoundingClientRect();
+      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const hoverSec = pos * video.duration;
+      if (timelineHoverTime) {
+        timelineHoverTime.style.display = 'block';
+        timelineHoverTime.style.left = `${pos * 100}%`;
+        timelineHoverTime.textContent = formatVideoTime(hoverSec);
+      }
+      if (isScrubbing) handleTimelineScrub(e);
+    });
+
+    timelineContainer.addEventListener('mouseleave', () => {
+      if (timelineHoverTime) timelineHoverTime.style.display = 'none';
+    });
+  }
+
+  window.addEventListener('mouseup', () => {
+    if (isScrubbing) isScrubbing = false;
+  });
+
+  if (volumeSlider) {
+    volumeSlider.addEventListener('input', (e) => {
+      video.volume = parseFloat(e.target.value);
+      video.muted = (video.volume === 0);
+      updateVolumeIcon();
+    });
+  }
+
+  if (volumeBtn) {
+    volumeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      video.muted = !video.muted;
+      updateVolumeIcon();
+    });
+  }
+
+  function updateVolumeIcon() {
+    if (!volumeBtn) return;
+    if (video.muted || video.volume === 0) {
+      volumeBtn.innerHTML = '<i class="fa-solid fa-volume-xmark" style="color: #ff5449;"></i>';
+    } else if (video.volume < 0.5) {
+      volumeBtn.innerHTML = '<i class="fa-solid fa-volume-low"></i>';
+    } else {
+      volumeBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    }
+  }
+
+  if (speedBtn && speedDropdown) {
+    speedBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = speedDropdown.style.display === 'flex';
+      speedDropdown.style.display = isOpen ? 'none' : 'flex';
+      if (serverDropdown) serverDropdown.style.display = 'none';
+    });
+
+    speedDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const speed = parseFloat(item.dataset.speed);
+        video.playbackRate = speed;
+        speedDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const speedLabel = document.getElementById('speedValueLabel');
+        if (speedLabel) speedLabel.textContent = `${speed}x`;
+        speedDropdown.style.display = 'none';
+      });
+    });
+  }
+
+  if (serverBtn && serverDropdown) {
+    serverBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = serverDropdown.style.display === 'flex';
+      serverDropdown.style.display = isOpen ? 'none' : 'flex';
+      if (speedDropdown) speedDropdown.style.display = 'none';
+    });
+  }
+
+  if (subtitleBtn) {
+    subtitleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tracks = video.textTracks;
+      if (tracks && tracks.length > 0) {
+        const isShowing = tracks[0].mode === 'showing';
+        tracks[0].mode = isShowing ? 'hidden' : 'showing';
+        subtitleBtn.classList.toggle('active-sub', !isShowing);
+      }
+    });
+  }
+
+  if (pipBtn) {
+    pipBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try {
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else if (document.pictureInPictureEnabled) {
+          await video.requestPictureInPicture();
+        }
+      } catch (err) {}
+    });
+  }
+
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlayerFullscreen();
+    });
+  }
+
+  video.addEventListener('dblclick', (e) => {
+    e.stopPropagation();
+    togglePlayerFullscreen();
+  });
+
+  window.addEventListener('click', () => {
+    if (speedDropdown) speedDropdown.style.display = 'none';
+    if (serverDropdown) serverDropdown.style.display = 'none';
+  });
+
+  if (exitBtn) {
+    exitBtn.addEventListener('click', exitVenticPlayer);
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (!isPlayerActive) return;
+    if (['Space', 'KeyK'].includes(e.code)) {
+      e.preventDefault();
+      togglePlayPause();
+    } else if (['ArrowLeft', 'KeyJ'].includes(e.code)) {
+      e.preventDefault();
+      seekDelta(-10);
+    } else if (['ArrowRight', 'KeyL'].includes(e.code)) {
+      e.preventDefault();
+      seekDelta(10);
+    } else if (e.code === 'ArrowUp') {
+      e.preventDefault();
+      video.volume = Math.min(1, video.volume + 0.1);
+      if (volumeSlider) volumeSlider.value = video.volume;
+      updateVolumeIcon();
+    } else if (e.code === 'ArrowDown') {
+      e.preventDefault();
+      video.volume = Math.max(0, video.volume - 0.1);
+      if (volumeSlider) volumeSlider.value = video.volume;
+      updateVolumeIcon();
+    } else if (e.code === 'KeyF') {
+      e.preventDefault();
+      togglePlayerFullscreen();
+    } else if (e.code === 'KeyM') {
+      e.preventDefault();
+      video.muted = !video.muted;
+      updateVolumeIcon();
+    } else if (e.code === 'Escape') {
+      exitVenticPlayer();
+    }
+  });
 }
 
 // Toast Notification Helper (Pure Vector SVGs, Zero Mobile Emojis)
@@ -2846,7 +3251,11 @@ function setupGlobalEventDelegation() {
   if (elements.detailPlayBtn) {
     elements.detailPlayBtn.addEventListener('click', () => {
       if (activeMedia) {
-        fetchAndDisplayStreams(activeMedia, selectedSeason, selectedEpisode);
+        const imdbId = activeMedia.id || 'tt15239678';
+        const isSeries = activeMedia.type === 'series' || activeMedia.isAnime;
+        const servers = generateServerUrls(imdbId, isSeries, selectedSeason, selectedEpisode);
+        addToHistory(activeMedia, selectedSeason, selectedEpisode);
+        launchVenticPlayer(activeMedia.name, servers[0].url);
       }
     });
   }
