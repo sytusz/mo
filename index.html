@@ -625,29 +625,19 @@
        CINEMAIQ NATIVE CUSTOM PLAYER (0% ADS · 100% CONTROL)
        ==================================================================== -->
   <div class="ventic-player-screen" id="venticPlayerScreen" style="display: none;">
-    <!-- Main Video Stage -->
+    <!-- Dedicated Mobile Floating Back Button (Always Clickable) -->
+    <button class="mobile-floating-back-btn" id="mobileFloatingBackBtn" title="Back (Esc)">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <!-- Main Video Stage (High Compatibility Player Engine) -->
     <div class="player-video-canvas" id="videoCanvas">
-      <video id="cinemaNativeVideo" class="cinema-native-video" playsinline preload="auto"></video>
-      <div id="fallbackIframeContainer" class="fallback-iframe-container" style="display: none;"></div>
+      <iframe id="cinemaStreamIframe" class="cinema-stream-iframe" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen style="width: 100%; height: 100%; border: none; background: #000;"></iframe>
+      <video id="cinemaNativeVideo" class="cinema-native-video" playsinline preload="auto" crossorigin="anonymous" style="display: none;"></video>
     </div>
 
-    <!-- Double-Tap Seek Ripples for Mobile & Touch -->
-    <div class="seek-ripple-area left" id="seekRippleLeft">
-      <div class="ripple-content"><i class="fa-solid fa-backward"></i><span>-10s</span></div>
-    </div>
-    <div class="seek-ripple-area right" id="seekRippleRight">
-      <div class="ripple-content"><i class="fa-solid fa-forward"></i><span>+10s</span></div>
-    </div>
-
-    <!-- Big Center Loading & Action Indicator -->
-    <div class="cinema-center-action" id="cinemaCenterAction">
-      <div class="cinema-center-icon" id="cinemaCenterIcon"><i class="fa-solid fa-play"></i></div>
-      <div class="cinema-center-spinner" id="cinemaCenterSpinner" style="display: none;"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
-    </div>
-
-    <!-- Custom Player HUD Controls Overlay -->
+    <!-- Floating Top HUD Bar (Title & Source Switcher) -->
     <div class="player-hud" id="playerHud">
-      <!-- TOP HUD BAR -->
       <div class="hud-top">
         <div class="hud-top-left">
           <button class="hud-btn hud-back" id="exitPlayerBtn" title="Back to Browse (Esc)">
@@ -656,95 +646,10 @@
           <div class="hud-title-info">
             <h2 id="hudMediaTitle">Now Playing</h2>
             <div class="hud-codec-tags">
-              <span class="codec-pill" id="hudQualityPill"><i class="fa-solid fa-shield-halved"></i> CinemaIQ Native 4K</span>
+              <span class="codec-pill" id="hudQualityPill"><i class="fa-solid fa-shield-halved"></i> CinemaIQ Ultra 1080p</span>
               <span class="codec-pill" id="hudEpisodeTag" style="display: none;">S1:E1</span>
-              <span class="codec-pill ad-free-badge"><i class="fa-solid fa-ban"></i> 0% Ads</span>
+              <span class="codec-pill ad-free-badge"><i class="fa-solid fa-bolt"></i> Fast Stream</span>
             </div>
-          </div>
-        </div>
-
-        <div class="hud-top-right">
-          <!-- Server / Source Switcher Dropdown Button -->
-          <div class="hud-menu-wrapper">
-            <button class="hud-action-pill" id="cinemaServerBtn" title="Switch Server / Source">
-              <i class="fa-solid fa-server"></i> <span id="currentServerLabel">Server 1 (Native 4K)</span> <i class="fa-solid fa-chevron-down"></i>
-            </button>
-            <div class="hud-dropdown-panel" id="cinemaServerDropdown" style="display: none;"></div>
-          </div>
-
-          <!-- Playback Speed Button -->
-          <div class="hud-menu-wrapper">
-            <button class="hud-action-pill" id="cinemaSpeedBtn" title="Playback Speed">
-              <i class="fa-solid fa-gauge-high"></i> <span id="speedValueLabel">1.0x</span>
-            </button>
-            <div class="hud-dropdown-panel speed-panel" id="cinemaSpeedDropdown" style="display: none;">
-              <button class="dropdown-item" data-speed="0.5">0.5x</button>
-              <button class="dropdown-item" data-speed="0.75">0.75x</button>
-              <button class="dropdown-item active" data-speed="1">1.0x (Normal)</button>
-              <button class="dropdown-item" data-speed="1.25">1.25x</button>
-              <button class="dropdown-item" data-speed="1.5">1.5x</button>
-              <button class="dropdown-item" data-speed="2">2.0x</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BOTTOM HUD BAR -->
-      <div class="hud-bottom">
-        <!-- Interactive Progress Timeline -->
-        <div class="timeline-container" id="timelineContainer">
-          <div class="timeline-hover-time" id="timelineHoverTime">00:00</div>
-          <div class="timeline-track">
-            <div class="timeline-buffer" id="timelineBuffer"></div>
-            <div class="timeline-progress" id="timelineProgress"></div>
-            <div class="timeline-scrubber" id="timelineScrubber"></div>
-          </div>
-        </div>
-
-        <!-- Bottom Controls Row -->
-        <div class="hud-controls-row">
-          <div class="controls-left">
-            <button class="control-btn" id="cinemaPlayPauseBtn" title="Play/Pause (Space)">
-              <i class="fa-solid fa-play"></i>
-            </button>
-            <button class="control-btn" id="cinemaRewindBtn" title="Rewind 10s (Left Arrow)">
-              <i class="fa-solid fa-rotate-left"></i>
-            </button>
-            <button class="control-btn" id="cinemaForwardBtn" title="Forward 10s (Right Arrow)">
-              <i class="fa-solid fa-rotate-right"></i>
-            </button>
-
-            <!-- Volume Control -->
-            <div class="volume-control-wrap">
-              <button class="control-btn" id="cinemaVolumeBtn" title="Mute (M)">
-                <i class="fa-solid fa-volume-high"></i>
-              </button>
-              <input type="range" class="volume-slider" id="cinemaVolumeSlider" min="0" max="1" step="0.05" value="1" />
-            </div>
-
-            <!-- Time Display -->
-            <div class="time-display" id="cinemaTimeDisplay">
-              <span id="cinemaCurrentTime">00:00</span>
-              <span class="time-separator">/</span>
-              <span id="cinemaDuration">00:00</span>
-            </div>
-          </div>
-
-          <div class="controls-right">
-            <!-- Subtitle Selector Toggle -->
-            <button class="control-btn active-sub" id="cinemaSubtitleToggleBtn" title="Subtitles (C)">
-              <i class="fa-solid fa-closed-captioning"></i>
-            </button>
-
-            <!-- Picture in Picture -->
-            <button class="control-btn" id="cinemaPipBtn" title="Picture in Picture">
-              <i class="fa-solid fa-layer-group"></i>
-            </button>
-
-            <!-- Fullscreen -->
-            <button class="control-btn" id="cinemaFullscreenBtn" title="Fullscreen (F)">
-              <i class="fa-solid fa-expand"></i>
-            </button>
           </div>
         </div>
       </div>
