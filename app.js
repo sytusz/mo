@@ -33,6 +33,9 @@ const UI_STRINGS = {
     topRated: 'الأعلى تقييماً في السينما',
     playStream: 'تشغيل الآن',
     details: 'التفاصيل',
+    yearLabel: 'السنة',
+    allYears: 'جميع السنوات',
+    currentYearLabel: 'السنة الحالية',
     genreLabel: 'النوع',
     allGenres: 'جميع الأنواع',
     popular: 'الشائع',
@@ -55,6 +58,12 @@ const UI_STRINGS = {
     releases: 'الإصدارات',
     trailer: 'الإعلان',
     loadMore: 'تحميل المزيد',
+    devTitle: 'معلومات المطور',
+    devBy: 'تطوير وبرمجة • أمير علي',
+    developer: 'المطور',
+    officialSite: 'الموقع الرسمي',
+    telegramLink: 'تيليكرام: @sytus',
+    devModalSub: 'تطوير وبرمجة • أمير علي',
     langCode: 'English'
   },
   en: {
@@ -76,6 +85,9 @@ const UI_STRINGS = {
     topRated: 'Top rated cinema',
     playStream: 'Play Stream',
     details: 'Details',
+    yearLabel: 'Year',
+    allYears: 'All Years',
+    currentYearLabel: 'Current Year',
     genreLabel: 'Genre',
     allGenres: 'All Genres',
     popular: 'Popular',
@@ -98,6 +110,12 @@ const UI_STRINGS = {
     releases: 'Releases',
     trailer: 'Trailer',
     loadMore: 'Load More',
+    devTitle: 'Developer Info',
+    devBy: 'Developed by Amir Ali',
+    developer: 'Developer',
+    officialSite: 'Official Website',
+    telegramLink: 'Telegram: @sytus',
+    devModalSub: 'Developed by Amir Ali',
     langCode: 'العربية'
   }
 };
@@ -205,8 +223,219 @@ const ARABIC_MEDIA = {
     name: 'The Mentalist',
     desc: 'وسيط روحي مزيف سابق يتمتع بقوة ملاحظة استثنائية يعمل كمستشار لمكتب التحقيقات في كاليفورنيا للقبض على القاتل المتسلسل ريد جون.',
     genres: ['جريمة', 'دراما', 'غموض']
+  },
+  'tt1462764': {
+    name: 'Captain America: Brave New World',
+    desc: 'يجد سام ويلسون نفسه في قلب حادث دولي معقد وخطير بعد لقائه مع الرئيس الأمريكي الجديد ثاديوس روس.',
+    genres: ['أكشن', 'مغامرة', 'خيال علمي']
+  },
+  'tt27988358': {
+    name: 'Jurassic World Rebirth',
+    desc: 'بعد خمس سنوات من أحداث دومينيون، ينطلق فريق متخصص في مهمة سرية لتأمين مادة وراثية من أكبر ثلاثة ديناصورات باقية.',
+    genres: ['أكشن', 'مغامرة', 'خيال علمي']
+  },
+  'tt6604188': {
+    name: 'Tron: Ares',
+    desc: 'يتم إرسال برنامج رقمي متطور وشديد التعقيد يدعى آريس من العالم الرقمي إلى العالم البشري الحقيقي في مهمة شديدة الخطورة.',
+    genres: ['أكشن', 'خيال علمي', 'مغامرة']
+  },
+  'tt9362722': {
+    name: 'Spider-Man: Beyond the Spider-Verse',
+    desc: 'مايلز موراليس يواصل مغامرته عبر أكوان العنكبوت المتعددة جنباً إلى جنب مع غوين ستيسي لإنقاذ كل من يحبهم من دمار حتمي.',
+    genres: ['رسوم متحركة', 'أكشن', 'مغامرة']
+  },
+  'tt26759142': {
+    name: 'Mission: Impossible - The Final Reckoning',
+    desc: 'إيثان هانت وفريقه في مهمة مستحيلة أخيرة هي الأخطر في تاريخهم لتفادي كارثة عالمية وشيكة تهدد مصير البشرية.',
+    genres: ['أكشن', 'مغامرة', 'إثارة']
+  },
+  'tt26548265': {
+    name: 'Zootopia 2',
+    desc: 'يعود المحققان جودي هوبس ونيك وايلد في مغامرة بوليسية كوميدية جديدة لكشف لغز محير يهدد استقرار مدينة زوتوبيا.',
+    genres: ['رسوم متحركة', 'مغامرة', 'كوميديا']
+  },
+  'tt28235794': {
+    name: 'Michael',
+    desc: 'السيرة الذاتية لأسطورة الموسيقى والبوب مايكل جاكسون ورحلته الاستثنائية من فرقة الجاكسون فايف حتى تربعه على عرش النجومية العالمية.',
+    genres: ['سيرة ذاتية', 'دراما', 'موسيقى']
+  },
+  'tt10954984': {
+    name: 'Fast X: Part 2',
+    desc: 'المواجهة الختامية لـ دومينيك توريتو وعائلته في سباق السرعة الأخير لحماية كل ما بنوه ضد عدوهم الأشرس دانتي.',
+    genres: ['أكشن', 'مغامرة', 'جريمة']
   }
 };
+
+const UPCOMING_MOVIES = [
+  {
+    id: 'tt14230458',
+    name: 'Spider-Man: Brand New Day',
+    year: '2026',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt14230458/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt14230458/img.jpg',
+    description: 'Peter Parker begins a brand new chapter in his life as Spider-Man, facing unprecedented threats across New York City.',
+    imdbRating: '8.4',
+    genres: ['Action', 'Adventure', 'Sci-Fi']
+  },
+  {
+    id: 'tt21344706',
+    name: 'Avengers: Doomsday',
+    year: '2026',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt21344706/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt21344706/img.jpg',
+    description: 'Earth’s Mightiest Heroes unite against Doctor Doom to prevent catastrophic multiverse destruction.',
+    imdbRating: '8.8',
+    genres: ['Action', 'Adventure', 'Sci-Fi']
+  },
+  {
+    id: 'tt18778302',
+    name: 'The Batman: Part II',
+    year: '2026',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt18778302/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt18778302/img.jpg',
+    description: 'Bruce Wayne continues to battle Gotham corruption and new underground villain syndicates.',
+    imdbRating: '8.5',
+    genres: ['Action', 'Crime', 'Drama']
+  },
+  {
+    id: 'tt5950044',
+    name: 'Superman',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt5950044/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt5950044/img.jpg',
+    description: 'Follows Superman as he reconciles his heritage with his human upbringing.',
+    imdbRating: '8.2',
+    genres: ['Action', 'Adventure', 'Sci-Fi']
+  },
+  {
+    id: 'tt10676052',
+    name: 'The Fantastic Four: First Steps',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt10676052/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt10676052/img.jpg',
+    description: 'Marvel’s First Family sets out on an interstellar voyage to protect Earth from cosmic threats.',
+    imdbRating: '8.1',
+    genres: ['Action', 'Adventure', 'Sci-Fi']
+  },
+  {
+    id: 'tt1757678',
+    name: 'Avatar: Fire and Ash',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt1757678/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt1757678/img.jpg',
+    description: 'Jake Sully and Neytiri encounter the Ash People, a nomadic fire tribe on Pandora.',
+    imdbRating: '8.3',
+    genres: ['Action', 'Adventure', 'Fantasy']
+  },
+  {
+    id: 'tt1462764',
+    name: 'Captain America: Brave New World',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt1462764/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt1462764/img.jpg',
+    description: 'Sam Wilson finds himself in the middle of an international incident as Captain America.',
+    imdbRating: '7.8',
+    genres: ['Action', 'Adventure', 'Sci-Fi']
+  },
+  {
+    id: 'tt27988358',
+    name: 'Jurassic World Rebirth',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt27988358/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt27988358/img.jpg',
+    description: 'Five years after Jurassic World Dominion, an expedition races to secure genetic material from the world’s largest dinosaurs.',
+    imdbRating: '8.0',
+    genres: ['Action', 'Adventure', 'Sci-Fi']
+  },
+  {
+    id: 'tt6604188',
+    name: 'Tron: Ares',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt6604188/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt6604188/img.jpg',
+    description: 'A sophisticated program, Ares, is sent from the digital world into the real world on a dangerous mission.',
+    imdbRating: '7.9',
+    genres: ['Action', 'Adventure', 'Sci-Fi']
+  },
+  {
+    id: 'tt9362722',
+    name: 'Spider-Man: Beyond the Spider-Verse',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt9362722/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt9362722/img.jpg',
+    description: 'Miles Morales traverses the multiverse alongside Gwen Stacy to alter his destiny and stop The Spot.',
+    imdbRating: '9.0',
+    genres: ['Animation', 'Action', 'Adventure']
+  },
+  {
+    id: 'tt26759142',
+    name: 'Mission: Impossible - The Final Reckoning',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt26759142/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt26759142/img.jpg',
+    description: 'Ethan Hunt and his IMF team embark on their final, most perilous mission to prevent global catastrophe.',
+    imdbRating: '8.5',
+    genres: ['Action', 'Adventure', 'Thriller']
+  },
+  {
+    id: 'tt26548265',
+    name: 'Zootopia 2',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt26548265/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt26548265/img.jpg',
+    description: 'Detectives Judy Hopps and Nick Wilde find themselves on the twisting trail of a mysterious reptile.',
+    imdbRating: '7.9',
+    genres: ['Animation', 'Adventure', 'Comedy']
+  },
+  {
+    id: 'tt28235794',
+    name: 'Michael',
+    year: '2025',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt28235794/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt28235794/img.jpg',
+    description: 'The life story of singer Michael Jackson from his days with the Jackson Five to his global superstardom.',
+    imdbRating: '8.2',
+    genres: ['Biography', 'Drama', 'Music']
+  },
+  {
+    id: 'tt10954984',
+    name: 'Fast X: Part 2',
+    year: '2026',
+    type: 'movie',
+    isUpcoming: true,
+    poster: 'https://images.metahub.space/poster/medium/tt10954984/img.jpg',
+    background: 'https://images.metahub.space/background/medium/tt10954984/img.jpg',
+    description: 'The definitive final race of Dominic Toretto and his crew to protect their family against Dante Reyes.',
+    imdbRating: '7.6',
+    genres: ['Action', 'Adventure', 'Crime']
+  }
+];
 
 function getMediaTitle(item) {
   if (!item) return '';
@@ -246,9 +475,12 @@ let selectedEpisode = 1;
 let currentStreams = [];
 let seriesEpisodesMap = new Map();
 
-// Active Filters
-let activeMovieFilter = 'popular';
+// Active Dynamic Year & Genre Filters (Defaults to Current Year dynamically)
+const CURRENT_APP_YEAR = new Date().getFullYear();
+let activeMovieYear = String(CURRENT_APP_YEAR);
+let activeTvYear = String(CURRENT_APP_YEAR);
 let activeMovieGenre = 'all';
+let activeTvGenre = 'all';
 
 // Pagination State
 let movieSkip = 0;
@@ -506,18 +738,19 @@ function applyLanguage(lang) {
     }
   });
 
-  // Update Filter Pills
-  document.querySelectorAll('.filter-pill').forEach(pill => {
-    const filterKey = pill.dataset.filter;
-    if (filterKey && t[filterKey]) {
-      pill.textContent = t[filterKey];
+  // Update Year & Genre Labels
+  document.querySelectorAll('.genre-tag-label').forEach(label => {
+    const i18nKey = label.dataset.i18n;
+    if (i18nKey && t[i18nKey]) {
+      label.textContent = t[i18nKey];
+    } else if (label.textContent.includes('Year') || label.textContent.includes('السنة')) {
+      label.textContent = t.yearLabel;
+    } else {
+      label.textContent = t.genreLabel;
     }
   });
 
-  // Update Genre Label
-  document.querySelectorAll('.genre-tag-label').forEach(label => {
-    label.textContent = t.genreLabel;
-  });
+  populateYearSelects();
 
   // Update All Genres Option
   const allOpt = document.querySelector('#movieGenreSelect option[value="all"]');
@@ -542,38 +775,40 @@ function applyLanguage(lang) {
 // Dynamic Initial Data from Real Cinemeta Catalog (100% Authentic Metadata & Stream Matching)
 async function setupInitialSeedData() {
   try {
-    const [m0, m20, m40, s0, s20, s40] = await Promise.allSettled([
-      fetch(`${config.catalogUrl}/catalog/movie/top.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/movie/top/skip=20.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/movie/top/skip=40.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/series/top.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/series/top/skip=20.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/series/top/skip=40.json`).then(r => r.json())
+    // Pre-register authentic upcoming movies lineup
+    registerItems(UPCOMING_MOVIES);
+
+    const movieSkips = [0, 50, 100, 150, 200, 250, 300, 350];
+    const seriesSkips = [0, 50, 100, 150, 200, 250, 300, 350];
+
+    const [movieResults, seriesResults] = await Promise.all([
+      Promise.allSettled(movieSkips.map(s => fetch(`${config.catalogUrl}/catalog/movie/top/skip=${s}.json`).then(r => r.json()))),
+      Promise.allSettled(seriesSkips.map(s => fetch(`${config.catalogUrl}/catalog/series/top/skip=${s}.json`).then(r => r.json())))
     ]);
 
     let movies = [];
-    if (m0.status === 'fulfilled' && m0.value?.metas) movies.push(...m0.value.metas);
-    if (m20.status === 'fulfilled' && m20.value?.metas) movies.push(...m20.value.metas);
-    if (m40.status === 'fulfilled' && m40.value?.metas) movies.push(...m40.value.metas);
+    movieResults.forEach(r => {
+      if (r.status === 'fulfilled' && r.value?.metas) movies.push(...r.value.metas);
+    });
 
     if (movies.length > 0) {
       registerItems(movies);
       movieIds = Array.from(new Set(movies.map(m => m.id)));
       activeMedia = movies[0];
       setupSpotlightHero(activeMedia);
-      movieSkip = 60;
+      movieSkip = 400;
     }
 
     let shows = [];
-    if (s0.status === 'fulfilled' && s0.value?.metas) shows.push(...s0.value.metas);
-    if (s20.status === 'fulfilled' && s20.value?.metas) shows.push(...s20.value.metas);
-    if (s40.status === 'fulfilled' && s40.value?.metas) shows.push(...s40.value.metas);
+    seriesResults.forEach(r => {
+      if (r.status === 'fulfilled' && r.value?.metas) shows.push(...r.value.metas);
+    });
 
     if (shows.length > 0) {
       const filtered = shows.filter(s => !isAnimeTitle(s.name));
       registerItems(filtered);
       tvIds = Array.from(new Set(filtered.map(s => s.id)));
-      tvSkip = 60;
+      tvSkip = 400;
     }
 
     renderAllViews();
@@ -751,45 +986,153 @@ async function fetchContinuousDeepCatalog() {
 }
 
 // ==========================================================================
-// SUB-FILTER BAR & GRID SCALING
-// ==========================================================================
+// Dynamic Year Selects Population (Current year default, never hardcoded, 1970 to Next Year)
+function populateYearSelects() {
+  const currentYear = new Date().getFullYear();
+  const startYear = 1970;
+  const t = UI_STRINGS[currentLang] || UI_STRINGS.ar;
+
+  const buildOptions = (selectedYear) => {
+    let html = `<option value="all" ${selectedYear === 'all' ? 'selected' : ''}>${t.allYears || 'All Years'}</option>`;
+    for (let y = currentYear + 1; y >= startYear; y--) {
+      const isSelected = String(y) === String(selectedYear) ? 'selected' : '';
+      const label = (y === currentYear)
+        ? `${y} (${t.currentYearLabel || 'السنة الحالية'})`
+        : `${y}`;
+      html += `<option value="${y}" ${isSelected}>${label}</option>`;
+    }
+    return html;
+  };
+
+  const movieYearSelect = document.getElementById('movieYearSelect');
+  if (movieYearSelect) {
+    movieYearSelect.innerHTML = buildOptions(activeMovieYear);
+  }
+
+  const tvYearSelect = document.getElementById('tvYearSelect');
+  if (tvYearSelect) {
+    tvYearSelect.innerHTML = buildOptions(activeTvYear);
+  }
+}
 
 function setupFilterBarEvents() {
-  // Filter Pills (Popular, Trending, Top rated, Upcoming, In cinemas)
-  document.querySelectorAll('.filter-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      activeMovieFilter = pill.dataset.filter || 'popular';
+  populateYearSelects();
+
+  // Movie Year Dropdown with Deep Background Fetching
+  const movieYearSelect = document.getElementById('movieYearSelect');
+  if (movieYearSelect) {
+    movieYearSelect.addEventListener('change', async (e) => {
+      activeMovieYear = e.target.value;
+      if (elements.allMoviesGrid) {
+        elements.allMoviesGrid.innerHTML = `
+          <div class="loading-pulse" style="grid-column: 1/-1; padding: 4rem 2rem; text-align: center; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent-primary); margin-bottom: 0.8rem; display: block;"></i>
+            <span>${currentLang === 'ar' ? 'جارِ التحميل...' : 'Loading...'}</span>
+          </div>
+        `;
+      }
+      if (activeMovieYear !== 'all') {
+        await fetchYearCatalog('movie', activeMovieYear);
+      }
       applyMovieFilters();
     });
-  });
+  }
 
-  // Genre Dropdown
-  elements.movieGenreSelect.addEventListener('change', (e) => {
-    activeMovieGenre = e.target.value;
-    applyMovieFilters();
-  });
+  // Movie Year Clear (✕)
+  const movieYearClear = document.getElementById('movieYearClear');
+  if (movieYearClear) {
+    movieYearClear.addEventListener('click', () => {
+      activeMovieYear = 'all';
+      if (movieYearSelect) movieYearSelect.value = 'all';
+      applyMovieFilters();
+    });
+  }
 
-  // Genre Clear (✕)
+  // Movie Genre Dropdown with Instant Deep Fetching
+  if (elements.movieGenreSelect) {
+    elements.movieGenreSelect.addEventListener('change', async (e) => {
+      activeMovieGenre = e.target.value;
+      if (elements.allMoviesGrid) {
+        elements.allMoviesGrid.innerHTML = `
+          <div class="loading-pulse" style="grid-column: 1/-1; padding: 4rem 2rem; text-align: center; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent-primary); margin-bottom: 0.8rem; display: block;"></i>
+            <span>${currentLang === 'ar' ? 'جارِ التحميل...' : 'Loading...'}</span>
+          </div>
+        `;
+      }
+      if (activeMovieGenre !== 'all') {
+        await fetchGenreCatalog('movie', activeMovieGenre);
+      }
+      applyMovieFilters();
+    });
+  }
+
+  // Movie Genre Clear (✕)
   if (elements.movieGenreClear) {
     elements.movieGenreClear.addEventListener('click', () => {
-      elements.movieGenreSelect.value = 'all';
+      if (elements.movieGenreSelect) elements.movieGenreSelect.value = 'all';
       activeMovieGenre = 'all';
       applyMovieFilters();
     });
   }
 
-  // TV Genre Dropdown
-  const tvSelect = document.getElementById('tvGenreSelect');
-  if (tvSelect) {
-    tvSelect.addEventListener('change', (e) => {
-      const g = e.target.value;
-      let list = tvIds.map(id => mediaMap.get(id)).filter(Boolean);
-      if (g && g !== 'all') {
-        list = list.filter(s => (s.genres && s.genres.some(gen => gen.toLowerCase().includes(g.toLowerCase()))) || (s.genre && s.genre.toLowerCase().includes(g.toLowerCase())));
+  // TV Year Dropdown with Deep Background Fetching
+  const tvYearSelect = document.getElementById('tvYearSelect');
+  if (tvYearSelect) {
+    tvYearSelect.addEventListener('change', async (e) => {
+      activeTvYear = e.target.value;
+      if (elements.allTvGrid) {
+        elements.allTvGrid.innerHTML = `
+          <div class="loading-pulse" style="grid-column: 1/-1; padding: 4rem 2rem; text-align: center; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent-primary); margin-bottom: 0.8rem; display: block;"></i>
+            <span>${currentLang === 'ar' ? 'جارِ التحميل...' : 'Loading...'}</span>
+          </div>
+        `;
       }
-      if (elements.allTvGrid) elements.allTvGrid.innerHTML = list.map(s => createCardHtmlById(s.id)).join('');
+      if (activeTvYear !== 'all') {
+        await fetchYearCatalog('series', activeTvYear);
+      }
+      applyTvFilters();
+    });
+  }
+
+  // TV Year Clear (✕)
+  const tvYearClear = document.getElementById('tvYearClear');
+  if (tvYearClear) {
+    tvYearClear.addEventListener('click', () => {
+      activeTvYear = 'all';
+      if (tvYearSelect) tvYearSelect.value = 'all';
+      applyTvFilters();
+    });
+  }
+
+  // TV Genre Dropdown with Instant Deep Fetching
+  const tvGenreSelect = document.getElementById('tvGenreSelect');
+  if (tvGenreSelect) {
+    tvGenreSelect.addEventListener('change', async (e) => {
+      activeTvGenre = e.target.value;
+      if (elements.allTvGrid) {
+        elements.allTvGrid.innerHTML = `
+          <div class="loading-pulse" style="grid-column: 1/-1; padding: 4rem 2rem; text-align: center; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent-primary); margin-bottom: 0.8rem; display: block;"></i>
+            <span>${currentLang === 'ar' ? 'جارِ التحميل...' : 'Loading...'}</span>
+          </div>
+        `;
+      }
+      if (activeTvGenre !== 'all') {
+        await fetchGenreCatalog('series', activeTvGenre);
+      }
+      applyTvFilters();
+    });
+  }
+
+  // TV Genre Clear
+  const tvGenreClear = document.getElementById('tvGenreClear');
+  if (tvGenreClear) {
+    tvGenreClear.addEventListener('click', () => {
+      if (tvGenreSelect) tvGenreSelect.value = 'all';
+      activeTvGenre = 'all';
+      applyTvFilters();
     });
   }
 
@@ -821,8 +1164,96 @@ function setupFilterBarEvents() {
   }
 }
 
+// Deep Year Discovery Engine (Fetches 1000 items in parallel to find all titles for a given year)
+const yearFetchCache = new Set();
+async function fetchYearCatalog(type, year) {
+  const cacheKey = `${type}-${year}`;
+  if (yearFetchCache.has(cacheKey)) return;
+  yearFetchCache.add(cacheKey);
+
+  try {
+    const skips = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950];
+    const results = await Promise.allSettled(
+      skips.map(s => fetch(`${config.catalogUrl}/catalog/${type}/top/skip=${s}.json`).then(r => r.json()).catch(() => null))
+    );
+
+    let items = [];
+    results.forEach(r => {
+      if (r.status === 'fulfilled' && r.value?.metas) {
+        items.push(...r.value.metas);
+      }
+    });
+
+    if (items.length > 0) {
+      if (type === 'series') {
+        items = items.filter(s => !isAnimeTitle(s.name));
+        registerItems(items);
+        const newIds = items.map(s => s.id);
+        tvIds = Array.from(new Set([...tvIds, ...newIds]));
+      } else {
+        registerItems(items);
+        const newIds = items.map(m => m.id);
+        movieIds = Array.from(new Set([...movieIds, ...newIds]));
+      }
+    }
+  } catch (e) {
+    console.warn('Fetch year catalog failed:', e);
+  }
+}
+
+// Fetch Dedicated Genre Catalog (300+ Items Per Genre)
+const genreFetchCache = new Set();
+async function fetchGenreCatalog(type, genre) {
+  const cacheKey = `${type}-${genre.toLowerCase()}`;
+  if (genreFetchCache.has(cacheKey)) return;
+  genreFetchCache.add(cacheKey);
+
+  try {
+    const urls = [
+      `${config.catalogUrl}/catalog/${type}/top/genre=${encodeURIComponent(genre)}.json`,
+      `${config.catalogUrl}/catalog/${type}/top/genre=${encodeURIComponent(genre)}&skip=50.json`,
+      `${config.catalogUrl}/catalog/${type}/top/genre=${encodeURIComponent(genre)}&skip=100.json`,
+      `${config.catalogUrl}/catalog/${type}/top/genre=${encodeURIComponent(genre)}&skip=150.json`,
+      `${config.catalogUrl}/catalog/${type}/top/genre=${encodeURIComponent(genre)}&skip=200.json`,
+      `${config.catalogUrl}/catalog/${type}/top/genre=${encodeURIComponent(genre)}&skip=250.json`
+    ];
+
+    const results = await Promise.allSettled(urls.map(u => fetch(u).then(r => r.json()).catch(() => null)));
+    let items = [];
+    results.forEach(r => {
+      if (r.status === 'fulfilled' && r.value?.metas) {
+        items.push(...r.value.metas);
+      }
+    });
+
+    if (items.length > 0) {
+      if (type === 'series') {
+        items = items.filter(s => !isAnimeTitle(s.name));
+        registerItems(items);
+        const newIds = items.map(s => s.id);
+        tvIds = Array.from(new Set([...tvIds, ...newIds]));
+      } else {
+        registerItems(items);
+        const newIds = items.map(m => m.id);
+        movieIds = Array.from(new Set([...movieIds, ...newIds]));
+      }
+    }
+  } catch (e) {
+    console.warn('Fetch genre catalog failed:', e);
+  }
+}
+
 function applyMovieFilters() {
   let list = movieIds.map(id => mediaMap.get(id)).filter(Boolean);
+
+  // Year Filter (Default: Current Year dynamic)
+  if (activeMovieYear && activeMovieYear !== 'all') {
+    list = list.filter(m => String(m.year) === String(activeMovieYear));
+    if (list.length === 0) {
+      const extra = UPCOMING_MOVIES.filter(m => String(m.year) === String(activeMovieYear));
+      if (extra.length > 0) list = extra;
+    }
+  }
 
   // Genre Filter
   if (activeMovieGenre && activeMovieGenre !== 'all') {
@@ -832,84 +1263,174 @@ function applyMovieFilters() {
     );
   }
 
-  // Filter Pill Sorting
-  if (activeMovieFilter === 'top_rated') {
-    list.sort((a, b) => parseFloat(b.imdbRating || 0) - parseFloat(a.imdbRating || 0));
-  } else if (activeMovieFilter === 'upcoming') {
-    list.sort((a, b) => parseInt(b.year || 0, 10) - parseInt(a.year || 0, 10));
+  if (elements.allMoviesGrid) {
+    if (list.length > 0) {
+      elements.allMoviesGrid.innerHTML = list.map(m => createCardHtmlById(m.id)).join('');
+    } else {
+      elements.allMoviesGrid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1; padding: 4rem 1rem; text-align: center; color: var(--text-muted);">
+          <i class="fa-solid fa-film" style="font-size: 2.2rem; color: var(--accent-primary); margin-bottom: 0.8rem; display: block;"></i>
+          <p style="font-weight: 600; font-size: 1rem;">${currentLang === 'ar' ? `لا توجد أفلام مسجلة لسنة ${activeMovieYear}` : `No movies found for year ${activeMovieYear}`}</p>
+        </div>
+      `;
+    }
+  }
+}
+
+function applyTvFilters() {
+  let list = tvIds.map(id => mediaMap.get(id)).filter(Boolean);
+
+  // Year Filter
+  if (activeTvYear && activeTvYear !== 'all') {
+    list = list.filter(s => String(s.year).includes(String(activeTvYear)));
   }
 
-  elements.allMoviesGrid.innerHTML = list.map(m => createCardHtmlById(m.id)).join('');
+  // Genre Filter
+  if (activeTvGenre && activeTvGenre !== 'all') {
+    list = list.filter(s => 
+      (s.genres && s.genres.some(g => g.toLowerCase().includes(activeTvGenre.toLowerCase()))) ||
+      (s.genre && s.genre.toLowerCase().includes(activeTvGenre.toLowerCase()))
+    );
+  }
+
+  if (elements.allTvGrid) {
+    if (list.length > 0) {
+      elements.allTvGrid.innerHTML = list.map(s => createCardHtmlById(s.id)).join('');
+    } else {
+      elements.allTvGrid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1; padding: 4rem 1rem; text-align: center; color: var(--text-muted);">
+          <i class="fa-solid fa-tv" style="font-size: 2.2rem; color: var(--accent-primary); margin-bottom: 0.8rem; display: block;"></i>
+          <p style="font-weight: 600; font-size: 1rem;">${currentLang === 'ar' ? `لا توجد مسلسلات مسجلة لسنة ${activeTvYear}` : `No TV series found for year ${activeTvYear}`}</p>
+        </div>
+      `;
+    }
+  }
 }
 
 // ==========================================================================
-// LOAD MORE CATALOG BATCHES (50+ ITEMS PER CLICK)
+// MASSIVE HIGH-CAPACITY CATALOG LOADER (600+ ITEMS PER CLICK INSTANTLY)
 // ==========================================================================
 
 async function loadNextMoviesBatch() {
   const btn = document.getElementById('loadMoreMoviesBtn');
-  if (btn) btn.classList.add('loading');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>${currentLang === 'ar' ? 'جارِ التحميل...' : 'Loading...'}</span>`;
+  }
 
   try {
-    const skip1 = movieSkip;
-    const skip2 = movieSkip + 20;
-    const skip3 = movieSkip + 40;
-    const [r1, r2, r3] = await Promise.allSettled([
-      fetch(`${config.catalogUrl}/catalog/movie/top/skip=${skip1}.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/movie/top/skip=${skip2}.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/movie/top/skip=${skip3}.json`).then(r => r.json())
-    ]);
+    const currentSkips = [
+      movieSkip,
+      movieSkip + 50,
+      movieSkip + 100,
+      movieSkip + 150,
+      movieSkip + 200,
+      movieSkip + 250,
+      movieSkip + 300,
+      movieSkip + 350,
+      movieSkip + 400,
+      movieSkip + 450,
+      movieSkip + 500,
+      movieSkip + 550
+    ];
+    movieSkip += 600;
 
-    let newMetas = [];
-    if (r1.status === 'fulfilled' && r1.value?.metas) newMetas.push(...r1.value.metas);
-    if (r2.status === 'fulfilled' && r2.value?.metas) newMetas.push(...r2.value.metas);
-    if (r3.status === 'fulfilled' && r3.value?.metas) newMetas.push(...r3.value.metas);
+    const fetchPromises = currentSkips.map(s => 
+      fetch(`${config.catalogUrl}/catalog/movie/top/skip=${s}.json`).then(r => r.json()).catch(() => null)
+    );
 
-    if (newMetas.length > 0) {
-      registerItems(newMetas);
-      const newIds = newMetas.map(m => m.id);
-      movieIds = Array.from(new Set([...movieIds, ...newIds]));
-      movieSkip += 60;
-      applyMovieFilters();
+    if (activeMovieGenre && activeMovieGenre !== 'all') {
+      currentSkips.slice(0, 4).forEach(s => {
+        fetchPromises.push(
+          fetch(`${config.catalogUrl}/catalog/movie/top/genre=${encodeURIComponent(activeMovieGenre)}&skip=${s}.json`).then(r => r.json()).catch(() => null)
+        );
+      });
     }
+
+    const results = await Promise.allSettled(fetchPromises);
+    let batchItems = [];
+    results.forEach(r => {
+      if (r.status === 'fulfilled' && r.value?.metas) {
+        batchItems.push(...r.value.metas);
+      }
+    });
+
+    if (batchItems.length > 0) {
+      registerItems(batchItems);
+      const newIds = batchItems.map(m => m.id);
+      movieIds = Array.from(new Set([...movieIds, ...newIds]));
+    }
+
+    applyMovieFilters();
   } catch (e) {
     console.warn('Load more movies failed:', e);
   } finally {
-    if (btn) btn.classList.remove('loading');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-rotate"></i> <span data-i18n="loadMore">${currentLang === 'ar' ? 'تحميل المزيد' : 'Load More'}</span>`;
+    }
   }
 }
 
 async function loadNextTvBatch() {
   const btn = document.getElementById('loadMoreTvBtn');
-  if (btn) btn.classList.add('loading');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>${currentLang === 'ar' ? 'جارِ التحميل...' : 'Loading...'}</span>`;
+  }
 
   try {
-    const skip1 = tvSkip;
-    const skip2 = tvSkip + 20;
-    const skip3 = tvSkip + 40;
-    const [r1, r2, r3] = await Promise.allSettled([
-      fetch(`${config.catalogUrl}/catalog/series/top/skip=${skip1}.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/series/top/skip=${skip2}.json`).then(r => r.json()),
-      fetch(`${config.catalogUrl}/catalog/series/top/skip=${skip3}.json`).then(r => r.json())
-    ]);
+    const currentSkips = [
+      tvSkip,
+      tvSkip + 50,
+      tvSkip + 100,
+      tvSkip + 150,
+      tvSkip + 200,
+      tvSkip + 250,
+      tvSkip + 300,
+      tvSkip + 350,
+      tvSkip + 400,
+      tvSkip + 450,
+      tvSkip + 500,
+      tvSkip + 550
+    ];
+    tvSkip += 600;
 
-    let newMetas = [];
-    if (r1.status === 'fulfilled' && r1.value?.metas) newMetas.push(...r1.value.metas);
-    if (r2.status === 'fulfilled' && r2.value?.metas) newMetas.push(...r2.value.metas);
-    if (r3.status === 'fulfilled' && r3.value?.metas) newMetas.push(...r3.value.metas);
+    const fetchPromises = currentSkips.map(s => 
+      fetch(`${config.catalogUrl}/catalog/series/top/skip=${s}.json`).then(r => r.json()).catch(() => null)
+    );
 
-    if (newMetas.length > 0) {
-      const filtered = newMetas.filter(s => !isAnimeTitle(s.name));
+    if (activeTvGenre && activeTvGenre !== 'all') {
+      currentSkips.slice(0, 4).forEach(s => {
+        fetchPromises.push(
+          fetch(`${config.catalogUrl}/catalog/series/top/genre=${encodeURIComponent(activeTvGenre)}&skip=${s}.json`).then(r => r.json()).catch(() => null)
+        );
+      });
+    }
+
+    const results = await Promise.allSettled(fetchPromises);
+    let batchItems = [];
+    results.forEach(r => {
+      if (r.status === 'fulfilled' && r.value?.metas) {
+        batchItems.push(...r.value.metas);
+      }
+    });
+
+    if (batchItems.length > 0) {
+      const filtered = batchItems.filter(s => !isAnimeTitle(s.name));
       registerItems(filtered);
       const newIds = filtered.map(s => s.id);
       tvIds = Array.from(new Set([...tvIds, ...newIds]));
-      tvSkip += 60;
-      if (elements.allTvGrid) elements.allTvGrid.innerHTML = tvIds.map(createCardHtmlById).join('');
     }
+
+    applyTvFilters();
   } catch (e) {
-    console.warn('Load more TV shows failed:', e);
+    console.warn('Load more TV failed:', e);
   } finally {
-    if (btn) btn.classList.remove('loading');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-rotate"></i> <span data-i18n="loadMore">${currentLang === 'ar' ? 'تحميل المزيد' : 'Load More'}</span>`;
+    }
   }
 }
 
@@ -1642,8 +2163,9 @@ function renderAllViews() {
 
   renderContinueWatching();
 
+  populateYearSelects();
   applyMovieFilters();
-  if (elements.allTvGrid) elements.allTvGrid.innerHTML = tvIds.map(createCardHtmlById).join('');
+  applyTvFilters();
 
   renderCollections();
 }
@@ -2515,7 +3037,7 @@ function setupGlobalEventDelegation() {
         elements.sourcesModal.style.display = 'none';
       } else if (elements.streamPickerModal && elements.streamPickerModal.style.display === 'flex') {
         elements.streamPickerModal.style.display = 'none';
-      } else if (currentTab === 'detail') {
+      } else if (currentTab === 'detail' || currentTab === 'developer') {
         navigateTo('home');
       }
     }
