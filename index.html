@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CinemaIQ</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ff5449'/><path d='M30,25 L75,50 L30,75 Z' fill='%23ffffff'/></svg>" />
+
+  <link rel="stylesheet" href="style.css?v=3.5" />
+</head>
+<body data-theme="ventic-dark">
+
+  <!-- ====================================================================
+       CINEMAIQ SHELL
+       ==================================================================== -->
+  <div class="ventic-shell" id="browseShell">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo" onclick="navigateTo('home')">
+        <div class="logo-mark">
+          <svg viewBox="0 0 32 32" class="v-icon" style="width: 26px; height: 26px; filter: drop-shadow(0 2px 8px rgba(255, 84, 73, 0.45));">
+            <defs>
+              <linearGradient id="cinemaLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff7961"/>
+                <stop offset="50%" stop-color="#ff5449"/>
+                <stop offset="100%" stop-color="#d32f2f"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="3" width="28" height="26" rx="6" fill="url(#cinemaLogoGrad)"/>
+            <circle cx="6" cy="7" r="1.5" fill="#161112"/>
+            <circle cx="6" cy="16" r="1.5" fill="#161112"/>
+            <circle cx="6" cy="25" r="1.5" fill="#161112"/>
+            <circle cx="26" cy="7" r="1.5" fill="#161112"/>
+            <circle cx="26" cy="16" r="1.5" fill="#161112"/>
+            <circle cx="26" cy="25" r="1.5" fill="#161112"/>
+            <path d="M12.5 10.5L21.5 16L12.5 21.5Z" fill="#ffffff"/>
+          </svg>
+        </div>
+        <span class="logo-title" id="sidebarLogoTitle">سينما العراق</span>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="nav-group">
+        <button class="nav-link active" data-tab="home">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </button>
+        <button class="nav-link" data-tab="movies">
+          <i class="fa-solid fa-film"></i>
+          <span>Movies</span>
+        </button>
+        <button class="nav-link" data-tab="tv">
+          <i class="fa-solid fa-tv"></i>
+          <span>TV Shows</span>
+        </button>
+
+        <div class="nav-divider"></div>
+
+        <button class="nav-link" data-tab="favourites">
+          <i class="fa-regular fa-heart"></i>
+          <span data-i18n="favourites">المفضلة</span>
+          <span class="nav-badge" id="favCountBadge" style="display: none;">0</span>
+        </button>
+        <button class="nav-link" data-tab="history">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span data-i18n="history">السجل</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="developer-socials">
+          <a href="https://xstein.site/" target="_blank" rel="noopener noreferrer" class="social-icon-btn site-link" title="Website: xstein.site">
+            <i class="fa-solid fa-globe"></i>
+          </a>
+          <a href="https://t.me/sytus" target="_blank" rel="noopener noreferrer" class="social-icon-btn tg-link" title="Telegram: @sytus">
+            <i class="fa-brands fa-telegram"></i>
+          </a>
+          <a href="https://instagram.com/lnetl" target="_blank" rel="noopener noreferrer" class="social-icon-btn insta-link" title="Instagram: @lnetl">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+        </div>
+
+        <button class="theme-quick-btn" id="themeModalBtn" title="Theme & Appearance">
+          <i class="fa-solid fa-palette"></i>
+          <span>Theme</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT -->
+    <div class="main-body">
+
+      <!-- TOP HEADER BAR -->
+      <header class="top-nav">
+        <div class="top-left">
+          <button class="icon-btn" id="backNavBtn" style="display: none;" title="Go Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <div class="mobile-brand-logo" onclick="navigateTo('home')">
+            <svg viewBox="0 0 32 32" class="v-icon" style="width: 22px; height: 22px; flex-shrink: 0;">
+              <defs>
+                <linearGradient id="mobileCinemaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff7961"/>
+                  <stop offset="50%" stop-color="#ff5449"/>
+                  <stop offset="100%" stop-color="#d32f2f"/>
+                </linearGradient>
+              </defs>
+              <rect x="2" y="3" width="28" height="26" rx="6" fill="url(#mobileCinemaGrad)"/>
+              <circle cx="6" cy="7" r="1.5" fill="#161112"/>
+              <circle cx="6" cy="16" r="1.5" fill="#161112"/>
+              <circle cx="6" cy="25" r="1.5" fill="#161112"/>
+              <circle cx="26" cy="7" r="1.5" fill="#161112"/>
+              <circle cx="26" cy="16" r="1.5" fill="#161112"/>
+              <circle cx="26" cy="25" r="1.5" fill="#161112"/>
+              <path d="M12.5 10.5L21.5 16L12.5 21.5Z" fill="#ffffff"/>
+            </svg>
+            <span class="mobile-brand-name" id="mobileBrandName">سينما العراق</span>
+          </div>
+          <div class="search-bar-wrap">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input 
+              type="text" 
+              id="globalSearchInput" 
+              placeholder="Search movies and shows" 
+              autocomplete="off"
+            />
+            <button class="search-clear-btn" id="searchClearBtn" style="display: none;">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+        <div class="top-right">
+          <button class="lang-pill-btn" id="langToggleBtn" title="تغيير اللغة / Switch Language">
+            <svg class="flag-svg" viewBox="0 0 900 600" width="22" height="15" style="border-radius: 3px; overflow: hidden; display: block; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 1px 4px rgba(0,0,0,0.3);">
+              <rect width="900" height="200" fill="#ce1126"/>
+              <rect y="200" width="900" height="200" fill="#ffffff"/>
+              <rect y="400" width="900" height="200" fill="#000000"/>
+              <text x="450" y="335" font-size="95" font-family="'Scheherazade New', 'Amiri', 'Traditional Arabic', sans-serif" font-weight="900" fill="#007a3d" text-anchor="middle">الله ★ أكبر</text>
+            </svg>
+            <span class="lang-code-text" id="langBadge">العربية</span>
+          </button>
+          <button class="icon-btn" id="sourcesBtn" title="All Source Addons">
+            <i class="fa-solid fa-bolt"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- SCROLLABLE CONTENT VIEW -->
+      <main class="content-scroll" id="contentScroll">
+
+        <!-- ==================== 1. HOME TAB VIEW ==================== -->
+        <div class="tab-view active" id="view-home">
+          
+          <!-- SEARCH RESULTS SECTION -->
+          <section class="row-section" id="searchResultsSection" style="display: none;">
+            <div class="section-header">
+              <h2 class="row-title">Search Results</h2>
+              <span class="results-count" id="searchCountBadge"></span>
+            </div>
+            <div class="poster-grid" id="searchResultsRow"></div>
+          </section>
+
+          <!-- SPOTLIGHT HERO BANNER -->
+          <section class="home-hero-spotlight" id="heroSpotlight">
+            <div class="hero-spotlight-backdrop" id="heroBackdrop"></div>
+            <div class="hero-spotlight-vignette"></div>
+
+            <div class="hero-spotlight-content">
+              <div class="hero-spotlight-meta">
+                <div class="detail-badge-row">
+                  <span class="rating-badge"><i class="fa-solid fa-star"></i> <span id="heroRating">8.8</span></span>
+                  <span class="codec-pill" id="heroTypePill">MOVIE</span>
+                  <span class="detail-pill" id="heroYear">2026</span>
+                  <span class="detail-pill" id="heroRuntime">2h 25m</span>
+                </div>
+
+                <h1 class="hero-spotlight-title" id="heroTitle">Spider-Man: Brand New Day</h1>
+                <p class="hero-spotlight-overview" id="heroOverview">Peter Parker begins a brand new chapter as New York's masked hero, navigating unexpected alliances and new ground-level villains.</p>
+
+                <div class="hero-spotlight-actions">
+                  <button class="btn-play" id="heroPlayBtn">
+                    <i class="fa-solid fa-play"></i>
+                    <span data-i18n="playStream">تشغيل الآن</span>
+                  </button>
+                  <button class="btn-details" id="heroDetailsBtn">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span data-i18n="details">التفاصيل</span>
+                  </button>
+                  <button class="btn-hero-icon" id="heroHeartBtn" title="Add to Favourites">
+                    <i class="fa-regular fa-heart"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mini Carousel Thumbs -->
+              <div class="hero-spotlight-thumbs" id="heroMiniCarousel"></div>
+            </div>
+          </section>
+
+          <!-- CONTINUE WATCHING ROW -->
+          <section class="row-section" id="continueWatchingSection" style="display: none;">
+            <div class="section-header">
+              <h2 class="row-title" data-i18n="continueWatching">تابع المشاهدة</h2>
+              <div class="row-controls">
+                <button class="row-arrow-btn" onclick="scrollRow('continueWatchingRow', -500)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="row-arrow-btn" onclick="scrollRow('continueWatchingRow', 500)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="poster-row" id="continueWatchingRow"></div>
+          </section>
+
+          <!-- POPULAR MOVIES ROW -->
+          <section class="row-section">
+            <div class="section-header">
+              <h2 class="row-title">Popular movies</h2>
+              <div class="row-controls">
+                <button class="row-arrow-btn" onclick="scrollRow('popularMoviesRow', -600)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="row-arrow-btn" onclick="scrollRow('popularMoviesRow', 600)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="poster-row" id="popularMoviesRow">
+              <div class="loading-pulse">Loading popular movies...</div>
+            </div>
+          </section>
+
+          <!-- POPULAR SHOWS ROW -->
+          <section class="row-section">
+            <div class="section-header">
+              <h2 class="row-title">Popular TV shows</h2>
+              <div class="row-controls">
+                <button class="row-arrow-btn" onclick="scrollRow('popularShowsRow', -600)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="row-arrow-btn" onclick="scrollRow('popularShowsRow', 600)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="poster-row" id="popularShowsRow">
+              <div class="loading-pulse">Loading popular shows...</div>
+            </div>
+          </section>
+
+          <!-- ACTION & ADVENTURE ROW -->
+          <section class="row-section">
+            <div class="section-header">
+              <h2 class="row-title">Action & Adventure</h2>
+              <div class="row-controls">
+                <button class="row-arrow-btn" onclick="scrollRow('actionMoviesRow', -600)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="row-arrow-btn" onclick="scrollRow('actionMoviesRow', 600)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="poster-row" id="actionMoviesRow">
+              <div class="loading-pulse">Loading action blockbusters...</div>
+            </div>
+          </section>
+
+          <!-- SCI-FI & FANTASY ROW -->
+          <section class="row-section">
+            <div class="section-header">
+              <h2 class="row-title">Sci-Fi & Fantasy</h2>
+              <div class="row-controls">
+                <button class="row-arrow-btn" onclick="scrollRow('scifiMoviesRow', -600)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="row-arrow-btn" onclick="scrollRow('scifiMoviesRow', 600)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="poster-row" id="scifiMoviesRow">
+              <div class="loading-pulse">Loading sci-fi cinema...</div>
+            </div>
+          </section>
+
+          <!-- CRIME & THRILLERS ROW -->
+          <section class="row-section">
+            <div class="section-header">
+              <h2 class="row-title">Crime & Thrillers</h2>
+              <div class="row-controls">
+                <button class="row-arrow-btn" onclick="scrollRow('crimeMoviesRow', -600)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="row-arrow-btn" onclick="scrollRow('crimeMoviesRow', 600)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="poster-row" id="crimeMoviesRow">
+              <div class="loading-pulse">Loading crime & suspense...</div>
+            </div>
+          </section>
+
+          <!-- COMEDY ROW -->
+          <section class="row-section">
+            <div class="section-header">
+              <h2 class="row-title">Comedy & Entertainment</h2>
+              <div class="row-controls">
+                <button class="row-arrow-btn" onclick="scrollRow('comedyMoviesRow', -600)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="row-arrow-btn" onclick="scrollRow('comedyMoviesRow', 600)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="poster-row" id="comedyMoviesRow">
+              <div class="loading-pulse">Loading comedy hits...</div>
+            </div>
+          </section>
+
+          <!-- TOP RATED ROW -->
+          <section class="row-section">
+            <div class="section-header">
+              <h2 class="row-title">Top rated cinema</h2>
+              <div class="row-controls">
+                <button class="row-arrow-btn" onclick="scrollRow('topRatedRow', -600)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="row-arrow-btn" onclick="scrollRow('topRatedRow', 600)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="poster-row" id="topRatedRow">
+              <div class="loading-pulse">Loading top rated...</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ==================== 2. MOVIES TAB VIEW (VENTIC EXACT REPLICA) ==================== -->
+        <div class="tab-view" id="view-movies" style="display: none;">
+          
+          <div class="sub-filter-bar">
+            <div class="filter-pills-left">
+              <button class="filter-pill active" data-filter="popular">Popular</button>
+              <button class="filter-pill" data-filter="trending">Trending</button>
+              <button class="filter-pill" data-filter="top_rated">Top rated</button>
+              <button class="filter-pill" data-filter="upcoming">Upcoming</button>
+              <button class="filter-pill" data-filter="in_cinemas">In cinemas</button>
+
+              <div class="genre-select-wrap">
+                <span class="genre-tag-label">Genre</span>
+                <select id="movieGenreSelect">
+                  <option value="all" selected>All Genres</option>
+                  <option value="Action">Action</option>
+                  <option value="Adventure">Adventure</option>
+                  <option value="Animation">Animation</option>
+                  <option value="Comedy">Comedy</option>
+                  <option value="Crime">Crime</option>
+                  <option value="Drama">Drama</option>
+                  <option value="Fantasy">Fantasy</option>
+                  <option value="Horror">Horror</option>
+                  <option value="Mystery">Mystery</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Sci-Fi">Sci-Fi</option>
+                  <option value="Thriller">Thriller</option>
+                </select>
+                <i class="fa-solid fa-xmark genre-clear-btn" id="movieGenreClear" title="Clear genre"></i>
+              </div>
+            </div>
+
+            <div class="filter-controls-right">
+              <div class="scale-slider-wrap">
+                <i class="fa-regular fa-square scale-icon-sm"></i>
+                <input type="range" id="gridScaleSlider" min="110" max="240" value="150" step="10" title="Poster Size" />
+                <i class="fa-regular fa-square scale-icon-lg"></i>
+              </div>
+              <button class="layout-btn active" id="layoutGridBtn" title="Grid Layout">
+                <i class="fa-solid fa-table-cells-large"></i>
+              </button>
+              <button class="layout-btn" id="layoutListBtn" title="List Layout">
+                <i class="fa-solid fa-list"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="poster-grid" id="allMoviesGrid">
+            <div class="loading-pulse" style="grid-column: 1/-1; padding: 4rem 2rem; text-align: center; color: var(--text-muted);">
+              <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 0.75rem; display: block;"></i>
+              <span>Loading 50+ popular movies...</span>
+            </div>
+          </div>
+          <div class="load-more-container" id="loadMoreMoviesWrap" style="display: none;">
+            <button class="load-more-btn" id="loadMoreMoviesBtn">
+              <i class="fa-solid fa-rotate"></i>
+              <span data-i18n="loadMore">تحميل المزيد</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== 3. TV SHOWS TAB VIEW ==================== -->
+        <div class="tab-view" id="view-tv" style="display: none;">
+          <div class="sub-filter-bar">
+            <div class="filter-pills-left">
+              <button class="filter-pill active" data-filter="popular">Popular</button>
+              <button class="filter-pill" data-filter="trending">Trending</button>
+              <button class="filter-pill" data-filter="top_rated">Top rated</button>
+
+              <div class="genre-select-wrap">
+                <span class="genre-tag-label">Genre</span>
+                <select id="tvGenreSelect">
+                  <option value="all">All Genres</option>
+                  <option value="Action">Action</option>
+                  <option value="Animation">Animation</option>
+                  <option value="Comedy">Comedy</option>
+                  <option value="Drama">Drama</option>
+                  <option value="Sci-Fi">Sci-Fi</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="poster-grid" id="allTvGrid">
+            <div class="loading-pulse" style="grid-column: 1/-1; padding: 4rem 2rem; text-align: center; color: var(--text-muted);">
+              <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 0.75rem; display: block;"></i>
+              <span>Loading 50+ popular TV series...</span>
+            </div>
+          </div>
+          <div class="load-more-container" id="loadMoreTvWrap" style="display: none;">
+            <button class="load-more-btn" id="loadMoreTvBtn">
+              <i class="fa-solid fa-rotate"></i>
+              <span data-i18n="loadMore">تحميل المزيد</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== 4. FAVOURITES TAB VIEW ==================== -->
+        <div class="tab-view" id="view-favourites" style="display: none;">
+          <div class="view-header">
+            <h2 data-i18n="favourites">المفضلة</h2>
+          </div>
+          <div class="poster-grid" id="favouritesGrid"></div>
+          <div class="empty-state" id="emptyFavourites" style="display: none;">
+            <i class="fa-regular fa-heart"></i>
+            <p data-i18n="emptyFav">لم تقم بإضافة أي عناصر للمفضلة بعد.</p>
+          </div>
+        </div>
+
+        <!-- ==================== 5. HISTORY TAB VIEW ==================== -->
+        <div class="tab-view" id="view-history" style="display: none;">
+          <div class="view-header" style="flex-direction: row; justify-content: space-between; align-items: center;">
+            <h2 data-i18n="history">السجل</h2>
+            <button class="btn-secondary" id="clearHistoryBtn" style="font-size: 0.8rem;"><i class="fa-solid fa-trash"></i> <span data-i18n="clear">مسح</span></button>
+          </div>
+          <div class="poster-grid" id="historyGrid"></div>
+          <div class="empty-state" id="emptyHistory" style="display: none;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <p>No watch history recorded yet.</p>
+          </div>
+        </div>
+
+        <!-- ====================================================================
+             8. EXACT ORIGINAL VENTIC DETAIL VIEW (MATCHING USER SCREENSHOT)
+             ==================================================================== -->
+        <div class="tab-view" id="view-detail" style="display: none;">
+          
+          <div class="ventic-detail-container">
+            <!-- Full Width Cinematic Background -->
+            <div class="ventic-detail-backdrop" id="detailBackdrop"></div>
+            <div class="ventic-detail-vignette"></div>
+
+            <div class="ventic-detail-main">
+              <!-- Left Floating Poster -->
+              <div class="ventic-detail-poster-box">
+                <img id="detailPosterImg" src="" alt="Poster" />
+              </div>
+
+              <!-- Right Comprehensive Info Block -->
+              <div class="ventic-detail-info-box">
+                
+                <!-- Logo or Title -->
+                <div class="detail-logo-wrap" id="detailLogoWrap">
+                  <img id="detailLogoImg" src="" alt="Logo" style="display: none;" />
+                  <h1 class="detail-text-title" id="detailTitle">Title</h1>
+                </div>
+
+                <!-- Tagline -->
+                <div class="detail-tagline" id="detailTagline">A brand new day starts now.</div>
+
+                <!-- Metadata Row -->
+                <div class="detail-meta-line">
+                  <span class="rating-badge-ventic">
+                    <i class="fa-solid fa-star"></i>
+                    <b id="detailRating">7.9</b>
+                    <span class="rating-count" id="detailRatingCount">(2,117)</span>
+                  </span>
+                  <span class="meta-tag-pill" id="detailPgRating">PG-13</span>
+                  <span class="meta-tag-text" id="detailYear">2026</span>
+                  <span class="meta-tag-text" id="detailRuntime">2h 25m</span>
+                  <span class="meta-tag-text" id="detailStatus">Released</span>
+                  <span class="meta-tag-studio" id="detailStudios">Marvel Studios, Columbia Pictures, Pascal Pictures</span>
+                </div>
+
+                <!-- Genre Pills -->
+                <div class="detail-genre-pills" id="detailGenres"></div>
+
+                <!-- Synopsis / Overview -->
+                <p class="detail-synopsis-text" id="detailSynopsis"></p>
+
+                <!-- Crew / Financials Grid (Director, Writers, Budget, Revenue) -->
+                <div class="detail-credits-grid">
+                  <div class="credit-item">
+                    <span class="credit-label" data-i18n="director">Director</span>
+                    <span class="credit-val" id="detailDirector">Destin Daniel Cretton</span>
+                  </div>
+                  <div class="credit-item">
+                    <span class="credit-label" data-i18n="writers">Writers</span>
+                    <span class="credit-val" id="detailWriters">Erik Sommers, Chris McKenna</span>
+                  </div>
+                  <div class="credit-item">
+                    <span class="credit-label" data-i18n="budget">Budget</span>
+                    <span class="credit-val" id="detailBudget">$225M</span>
+                  </div>
+                  <div class="credit-item">
+                    <span class="credit-label" data-i18n="revenue">Revenue</span>
+                    <span class="credit-val" id="detailRevenue">$2.2B</span>
+                  </div>
+                </div>
+
+                <!-- Action Button Row (Exact Ventic Buttons) -->
+                <div class="ventic-action-bar">
+                  <button class="ventic-btn-resume" id="detailPlayBtn">
+                    <i class="fa-solid fa-play"></i>
+                    <span id="detailPlayBtnText" data-i18n="playStream">Resume · 2h 14m left</span>
+                  </button>
+                  <button class="ventic-btn-sub" id="detailDownloadBtn">
+                    <i class="fa-solid fa-download"></i>
+                    <span data-i18n="download">Download</span>
+                  </button>
+                  <button class="ventic-btn-sub" id="detailSourcePickBtn">
+                    <i class="fa-solid fa-list-ul"></i>
+                    <span data-i18n="releases">Releases</span>
+                  </button>
+                  <button class="ventic-btn-sub" id="detailTrailerBtn">
+                    <i class="fa-brands fa-youtube"></i>
+                    <span data-i18n="trailer">Trailer</span>
+                  </button>
+                  <button class="ventic-btn-icon" id="detailWatchedBtn" title="Mark as Watched">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                  <button class="ventic-btn-icon" id="detailHeartBtn" title="Add to Favourites">
+                    <i class="fa-regular fa-heart"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- SEASONS & EPISODES SECTION (TV/Anime) -->
+            <section class="detail-episodes-section" id="detailEpisodesSection" style="display: none;">
+              <div class="section-header">
+                <h2 class="row-title" data-i18n="episodes">Seasons & Episodes</h2>
+                <span class="results-count" id="detailSeasonCount">Season 1</span>
+              </div>
+
+              <div class="detail-season-tabs" id="detailSeasonTabs"></div>
+              <div class="detail-episode-grid" id="detailEpisodeGrid"></div>
+            </section>
+
+            <!-- CAST SECTION (REAL PHOTO CARDS WITH CHARACTER ROLES) -->
+            <section class="ventic-cast-section" id="detailCastSection">
+              <h2 class="ventic-sub-heading" data-i18n="cast">Cast</h2>
+              <div class="ventic-cast-row" id="detailCastRow"></div>
+            </section>
+
+            <!-- MORE LIKE THIS / RECOMMENDATIONS -->
+            <section class="detail-related-section" id="detailRelatedSection">
+              <h2 class="ventic-sub-heading" data-i18n="moreLikeThis">More Like This</h2>
+              <div class="poster-row" id="detailRelatedRow"></div>
+            </section>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- ====================================================================
+       PLAYER STAGE
+       ==================================================================== -->
+  <div class="ventic-player-screen" id="venticPlayerScreen" style="display: none;">
+    <div class="player-video-canvas" id="videoCanvas"></div>
+
+    <div class="player-hud" id="playerHud">
+      <div class="hud-top">
+        <button class="hud-btn hud-back" id="exitPlayerBtn" title="Back to Browse (Esc)">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="hud-title-info">
+          <h2 id="hudMediaTitle">Now Playing</h2>
+          <div class="hud-codec-tags">
+            <span class="codec-pill" id="hudQualityPill">1080p Ultra</span>
+            <span class="codec-pill" id="hudEpisodeTag" style="display: none;">S1:E1</span>
+            <span class="codec-pill">&le; 5 GB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====================================================================
+       STREAM QUALITY PICKER MODAL
+       ==================================================================== -->
+  <div class="stream-picker-modal" id="streamPickerModal" style="display: none;">
+    <div class="stream-picker-backdrop" id="streamPickerBackdrop"></div>
+    <div class="stream-picker-box">
+      <div class="stream-picker-header">
+        <div class="stream-title-meta">
+          <h3 id="streamPickerTitle">Select Stream Quality</h3>
+          <span class="stream-source-tag"><i class="fa-solid fa-bolt"></i> High Speed Stream Nodes (&le; 5 GB)</span>
+        </div>
+        <button class="icon-btn" id="closeStreamPickerBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Top Provider Selector (YTS, 1337x, ThePirateBay, etc.) with Arrow Navigation -->
+      <div class="provider-bar-wrapper">
+        <button class="provider-scroll-arrow arrow-left" id="providerScrollLeftBtn"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="stream-provider-filter-bar" id="streamProviderFilterBar"></div>
+        <button class="provider-scroll-arrow arrow-right" id="providerScrollRightBtn"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+
+      <div class="stream-list" id="streamList"></div>
+    </div>
+  </div>
+
+
+  <!-- ====================================================================
+       THEMES & APPEARANCE MODAL
+       ==================================================================== -->
+  <div class="dialog-overlay" id="themeModal" style="display: none;">
+    <div class="dialog-box" style="max-width: 620px;">
+      <div class="dialog-header">
+        <h3><i class="fa-solid fa-palette"></i> Appearance & Themes</h3>
+        <button class="icon-btn" id="closeThemeBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="dialog-body">
+        <div class="theme-grid">
+          <button class="theme-card active" data-theme-set="ventic-dark">
+            <span class="theme-preview" style="background: #ffb4ab;"></span>
+            <span class="theme-name">CinemaIQ Dark (Rose)</span>
+          </button>
+          <button class="theme-card" data-theme-set="midnight-oled">
+            <span class="theme-preview" style="background: #000000; border: 1px solid #ffb4ab;"></span>
+            <span class="theme-name">Midnight OLED</span>
+          </button>
+          <button class="theme-card" data-theme-set="rose-pine">
+            <span class="theme-preview" style="background: #eb6f92;"></span>
+            <span class="theme-name">Rosé Pine</span>
+          </button>
+          <button class="theme-card" data-theme-set="tokyo-night">
+            <span class="theme-preview" style="background: #7aa2f7;"></span>
+            <span class="theme-name">Tokyo Night</span>
+          </button>
+          <button class="theme-card" data-theme-set="dracula">
+            <span class="theme-preview" style="background: #bd93f9;"></span>
+            <span class="theme-name">Dracula Purple</span>
+          </button>
+          <button class="theme-card" data-theme-set="nord">
+            <span class="theme-preview" style="background: #88c0d0;"></span>
+            <span class="theme-name">Nord Cyan</span>
+          </button>
+          <button class="theme-card" data-theme-set="crimson">
+            <span class="theme-preview" style="background: #ff5449;"></span>
+            <span class="theme-name">Crimson Red</span>
+          </button>
+          <button class="theme-card" data-theme-set="cyberpunk">
+            <span class="theme-preview" style="background: #ffd600;"></span>
+            <span class="theme-name">Cyberpunk Gold</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====================================================================
+       SOURCES & ADDONS MODAL (ONE-CLICK SELECTOR WITHOUT RAW URLS)
+       ==================================================================== -->
+  <div class="dialog-overlay" id="sourcesModal" style="display: none;">
+    <div class="dialog-box" style="max-width: 620px;">
+      <div class="dialog-header">
+        <h3><i class="fa-solid fa-bolt"></i> Stream Sources & Addons</h3>
+        <button class="icon-btn" id="closeSourcesBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="dialog-body">
+        <p class="dialog-desc">Select your preferred streaming addon and catalog provider. All sources auto-sync with live movie and series uploads.</p>
+        
+        <div class="addon-provider-grid" id="addonProviderGrid">
+          <div class="addon-card active" data-addon-id="torrentio" data-url="https://torrentio.strem.fun">
+            <div class="addon-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div class="addon-meta">
+              <h4>Torrentio Official</h4>
+              <p>Multi-Provider & Fast Streaming Mirror</p>
+            </div>
+            <span class="addon-status active-badge"><i class="fa-solid fa-check"></i> Active</span>
+          </div>
+
+          <div class="addon-card" data-addon-id="cinemeta" data-url="https://v3-cinemeta.strem.io">
+            <div class="addon-icon"><i class="fa-solid fa-film"></i></div>
+            <div class="addon-meta">
+              <h4>Cinemeta Live Catalog</h4>
+              <p>Global 500,000+ Movies, Shows & Anime</p>
+            </div>
+            <span class="addon-status"><i class="fa-solid fa-circle-check"></i> Connected</span>
+          </div>
+
+          <div class="addon-card" data-addon-id="knightcrawler" data-url="https://knightcrawler.elfhosted.com">
+            <div class="addon-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="addon-meta">
+              <h4>KnightCrawler Stream Node</h4>
+              <p>High Reliability & Multi-Audio Streams</p>
+            </div>
+            <span class="addon-status"><i class="fa-solid fa-circle-check"></i> Connected</span>
+          </div>
+
+          <div class="addon-card" data-addon-id="mediafusion" data-url="https://mediafusion.elfhosted.com">
+            <div class="addon-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="addon-meta">
+              <h4>MediaFusion Engine</h4>
+              <p>Direct Stream Aggregator & Fast Mirrors</p>
+            </div>
+            <span class="addon-status"><i class="fa-solid fa-circle-check"></i> Connected</span>
+          </div>
+        </div>
+
+        <div class="dialog-footer">
+          <button type="button" class="btn-primary" id="saveAddonBtn" style="width: 100%;">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- WebTorrent BitTorrent Streaming Engine (100% Ad-Free Native P2P Video) -->
+  <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+  <script src="app.js?v=3.5"></script>
+</body>
+</html>
